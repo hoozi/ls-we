@@ -35,13 +35,19 @@ const ListView:React.FC<React.PropsWithChildren<ListViewProps>> = ({
       onPullDownRefresh && onPullDownRefresh();
     }
   }
+  const bindEvent = (node, type) => {
+    node[`${type}EventListener`]('touchstart', handleTouchStart);
+    node[`${type}EventListener`]('touchmove', handleTouchMove);
+    node[`${type}EventListener`]('touchend', handleTouchEnd);
+    node[`${type}EventListener`]('touchcancel', handleTouchEnd);
+  }
   React.useLayoutEffect(() => {
     const node = dom.current;
-    node?.addEventListener('touchstart', handleTouchStart);
-    node?.addEventListener('touchmove', handleTouchMove);
-    node?.addEventListener('touchend', handleTouchEnd);
-    node?.addEventListener('touchcancel', handleTouchEnd);
-  }, [dom]);
+    bindEvent(node, 'add');
+    return () => {
+      bindEvent(node, 'remove');
+    }
+  }, [dom, bindEvent]);
   return (
     <ScrollView
       ref={dom}
