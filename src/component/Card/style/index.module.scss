@@ -1,0 +1,60 @@
+@import '../../../style/index.scss';
+
+.card {
+  background-color: #fff;
+  border-radius: 6PX;
+  overflow: hidden;
+  box-shadow: 0 0 6PX rgba(0,0,0,0.04);
+  margin: 8PX;
+  &:last-child {
+    //margin-bottom: 0;
+  }
+}
+
+.cardTopBar {
+  background-color:#fff7e6;
+  color:#fa8c16;
+  padding:8PX 12PX;
+  line-height: 1;
+}
+
+.cardHeader {
+  padding:16PX 12PX;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .cardHeaderContent {
+    flex: 1;
+    .cardTitle {
+      font-weight:bold;
+      line-height: 1;
+      font-size: 16PX;
+      display: flex;
+      justify-content: space-between;
+    }
+    .cardSubTitle {
+      color: #666;
+      line-height: 1;
+      //font-size: 12PX;
+      margin-top:8PX;
+      display: flex;
+      justify-content: space-between;
+      //margin-left: 4PX;
+    }
+  }
+}
+
+.cardBody {
+  padding:0 12PX 12PX;
+  .cardBodyInner {
+    padding:8PX 12PX;
+    border-radius: 6PX;
+    background-color: #f9f9f5;
+    color: #666;
+  }
+}
+
+.cardActions {
+  @extend %topHairLine;
+  display: flex;
+}

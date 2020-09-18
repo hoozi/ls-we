@@ -1,0 +1,59 @@
+@import '../../../style/index.scss';
+
+.timeline {
+  padding: 12PX;
+}
+.timelineItem {
+  position: relative;
+  padding-bottom: 12PX;
+  padding-left: 90PX;
+  width: 100%;
+  box-sizing: border-box;
+  padding-right: 8PX;
+  .label {
+    position: absolute;
+    left: 0;
+    top: 0;
+    text-align: center;
+    line-height: 1;
+  }
+  .tail,
+  .dot {
+    position: absolute;
+    left:83PX;
+  }
+  .tail {
+    height: 100%;
+    top: 12PX;
+    left: 87PX;
+    border-left: 2PX solid #ddd;
+  }
+  .dot {
+    box-sizing: border-box;
+    width: 10PX;
+    height: 10PX;
+    border: 2PX solid #ddd;
+    border-radius: 100PX;
+    top: 6PX;
+    //margin-top: -6PX;
+    z-index: 1;
+    background-color: #fff;
+  }
+  .timelineContent {
+    margin-left: 16PX;
+    line-height: 1;
+    /* height: 24PX;
+    line-height: 24PX; */
+  }
+  &:first-child {
+    .dot {
+      border-color: $color-success;
+    }
+  }
+  &:last-child {
+    padding-bottom: 0;
+    .tail {
+      display: none;
+    }
+  }
+}

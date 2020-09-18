@@ -1,0 +1,35 @@
+@import '../../../style/index.scss';
+
+.searchBar {
+  padding:6PX 12PX 12PX;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  &.fixed {
+    position: fixed;
+    top:0;
+    left:0;
+    right: 0;
+    z-index: 11;
+  }
+}
+
+.searchBarInner {
+  display: flex;
+  flex:1;
+  height: 32PX;
+  background-color: #f5f5f5;
+  padding: 0 12PX;
+  align-items: center;
+  border-radius: 8PX;
+  :global {
+    .at-icon-search {
+      font-size: 16PX;
+      color: #999;
+    }
+  }
+  .searchBarInput {
+    flex: 1;
+    margin-left: 8PX;
+  }
+}

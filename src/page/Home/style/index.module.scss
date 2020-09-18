@@ -1,0 +1,130 @@
+@import '../../../style/index.scss';
+
+.container {
+  height: 100%;
+  width: 100%;
+  //background-color: #fff;
+  //padding: 16PX 6PX;
+  box-sizing: border-box;
+}
+.userCard {
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 6PX rgba(0,0,0,.04);
+  padding:32PX 16PX;
+  display: flex;
+  background-color: $color-brand-dark;
+  align-items: center;
+  justify-content: space-between;
+  .userContent {
+    display:flex;
+    align-items: center;
+    position: relative; 
+    z-index: 10;
+  }
+  .circleBg {
+    width: 200PX;
+    height: 200PX;
+    position: absolute;
+    right: -50PX;
+    top: -85PX;
+    border-radius: 100PX;
+    background-color: #4b64e8;
+    z-index: 0;
+    &.circleBg1 {
+      width: 96PX;
+      height: 96PX;
+      left: -42PX;
+      top: -42PX;
+    }
+    &.circleBg2 {
+      width: 32PX;
+      height: 32PX;
+      top: 50PX;
+      left: 32%;
+    }
+    &.circleBg3 {
+      width: 64PX;
+      height: 64PX;
+      top: auto;
+      bottom: -32PX;
+      left: 40%;
+    }
+  }
+  :global {
+    .at-icon {
+      font-size: 20PX;
+      color: #fff;
+      position: relative;
+      z-index: 2;
+      left:0;
+      bottom:0
+    }
+    .at-avatar {
+      width: 64PX;
+      height: 64PX;
+      border: 4PX solid #4b64e8;
+    }
+  }
+  .userCardText {
+    margin-left: 12PX;
+    line-height: 1;
+    font-size: 16PX;
+    color: #fff;
+    font-weight: bold;
+  }
+  .extraText {
+    display: inline-block;
+    padding: 4PX 8PX;
+    line-height: 1;
+    border-radius: 4PX;
+    font-weight: normal;
+    color:#a7b6f6;
+    font-size: 14PX;
+    margin-top: 12PX;
+    background-color: #4b64e8;
+  }
+}
+
+
+.menuList {
+  //margin-top: 24PX;
+  padding:24PX 0;
+  background-color: #fff;
+  .menuHeader {
+    background-color: #fff;
+    padding:8PX 16PX;
+    display: flex;
+    align-items: center;
+    .menuTitle {
+      margin-left: 4PX;
+    }
+  }
+
+  .menuBody {
+   display: flex;
+   justify-content: flex-start;
+   .menuItem {
+     flex: 0 0 25%;
+     //margin-right: 12PX;
+     text-align: center;
+     line-height: 1;
+     display: flex;
+     justify-content: center;
+    .menuIcon {
+      width: 42PX;
+      height: 42PX;
+      line-height: 42PX;
+      border-radius: 6PX;
+      color: #fff;
+    }
+    .menuTitle {
+      display: block;
+      margin-top: 8PX;
+    }
+   }
+   
+  }
+}
+
+

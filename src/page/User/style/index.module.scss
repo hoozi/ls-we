@@ -1,0 +1,173 @@
+@import '../../../style/index.scss';
+
+.signContainer {
+  width: 100%;
+  height: 100vh;
+  background-color: #fff
+}
+.signCard {
+  background-color: #455fe4;
+  height: 160PX;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 65PX 24PX 0;
+  position: relative;
+  overflow: hidden;
+  .signTitle {
+    color: #fff;
+    font-size: 20PX;
+    position: relative;
+    display: block;
+    z-index: 10;
+  }
+  .signSubTitle {
+    margin-top:4PX;
+    font-size: 20PX;
+    color: #fff;
+    position: relative;
+    display: block;
+    z-index: 10;
+  }
+  .circleBg {
+    width: 380PX;
+    height: 380PX;
+    position: absolute;
+    right: -140PX;
+    top: -165PX;
+    border-radius: 380PX;
+    background-color: #4b64e8;
+    z-index: 1;
+  }
+}
+
+.signTab {
+  position: relative;
+  top: -46PX;
+  height: auto;
+  :global {
+    .at-tabs__header {
+      background-color: #455fe4;
+      padding:0 24PX;
+      .at-tabs__item {
+        margin-right: 24PX;
+        font-size: 16PX;
+        color: #a7b6f6;
+        padding:12PX 0;
+        flex: none;
+        &.at-tabs__item--active {
+          color: #fff;
+          .at-tabs__item-underline {
+            background-color: #fff
+          }
+        }
+      }
+    }
+  }
+}
+
+.signInContainer {
+  .signInTitle {
+    font-size: 16PX;
+    color: #fff;
+    padding:0 24PX;
+    margin-bottom: 12PX;
+    display: block;
+  }
+}
+
+.signForm {
+  padding: 24PX;
+  font-size: 15PX;
+  background-color: #fff;
+  &.signUpForm {
+    .signItemContainer {
+      margin-bottom: 24PX;
+      .error {
+        background-color: #fff1f0;
+        color: #f5222d;
+        border-radius: 4PX;
+        padding: 4PX 8PX;
+        font-size: 12PX;
+        margin-top: 4PX;
+        display: block;
+      }
+    } 
+    .signItem {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.signItem {
+  @extend %bottomHairLine;
+  padding-bottom: 12PX;
+  margin-bottom: 32PX;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;;
+  .signLabel {
+    display: block;
+    font-style: 16PX;
+    margin-bottom: 8PX;
+    //color: #333;
+  }
+}
+.imageContainer {
+  width: 100%;
+  height: 128PX;
+  border-radius: 8PX;
+  background-color: #f9f9f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+  line-height: 1;
+  text-align: center;
+  text {
+    display: block;
+  }
+  :global {
+    .at-icon {
+      font-size: 24PX;
+      margin-bottom: 8PX;
+    }
+  }
+}
+.signButton {
+  margin-top: 42PX;
+  border-radius: 8PX;
+  line-height: 52PX;
+  height: 52PX;
+  font-size: 17PX;
+  box-shadow: 0 0 12PX rgba(73, 98, 235, .65);
+}
+
+
+.signInputContainer {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  .textInput {
+    flex: 1
+    //border-bottom: 1px solid $color-border-base
+  }
+  .inputExtra {
+    :global {
+      .icon {
+        font-size: 20PX;
+        color: #a7b6f6;
+      }
+    }
+  }
+}
+
+.upPasswordItem {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  @extend %bottomHairLine;
+  padding:12PX;
+  text {
+    width: 100PX;
+  }
+}

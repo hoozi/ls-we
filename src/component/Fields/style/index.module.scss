@@ -1,0 +1,17 @@
+.field {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 6PX;
+  &:last-child {
+    margin-bottom: 0;
+  }
+  .fieldName {
+    display: flex;
+    align-items: center;
+    color: #999;
+  }
+  .fieldValue {
+    flex: 1;
+    color: #666;
+  }
+}

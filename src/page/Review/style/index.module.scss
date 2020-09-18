@@ -1,0 +1,76 @@
+@import '../../../style/index.scss';
+
+.listContainer {
+ // padding-top:56PX;
+ // height: 100%;
+}
+
+.tagContainer {
+  .tag {
+    color: $color-brand;
+    background-color: #e6f7ff;
+    border-radius: 4PX;
+    display: inline-block;
+    font-weight: bold;
+    line-height: 1;
+    padding:4PX 6PX;
+    //font-size: 12PX;
+    margin-right: 6PX;
+  }
+}
+
+.cardLink {
+  flex:1;
+  font-size: 16PX;
+  color: $color-brand;
+  height: 42PX;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  :global {
+    .icon {
+      margin-right: 2PX;
+      font-size: 18PX;
+    }
+  }
+  &:before {
+    content: '';
+    position: absolute;
+    width: 1PX;
+    height: 200%;
+    background-color:$color-border-base;
+    top:0;
+    right:0;
+    transform-origin:0 0;
+    transform: scale(.5);
+  }
+  &:last-child {
+    &:before {
+      display: none;
+    }
+  }
+}
+
+.contentItem {
+  padding:4PX 0 2PX;
+}
+
+.taskCard {
+  @extend %bottomHairLine;
+  background-color: #fff;
+  padding:12PX 12PX 24PX;
+  .taskTitle {
+    font-weight: bold;
+    font-size: 14PX;
+    padding: 0 8PX;
+  }
+  .taskExtra {
+    margin-top: 8PX;
+    border-radius: 4PX;
+    background-color:#e6f7ff;
+    color:$color-brand;
+    padding:8PX;
+    line-height: 1;
+  }
+}

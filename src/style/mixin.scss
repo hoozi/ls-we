@@ -1,0 +1,35 @@
+
+@mixin scale-hairline-common($color, $top, $right, $bottom, $left) {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+  background-color: $color;
+  display: block;
+  z-index: 1;
+  top: $top;
+  right: $right;
+  bottom: $bottom;
+  left: $left;
+}
+
+%bottomHairLine {
+  position: relative;
+  &:after {
+    @include scale-hairline-common($color-border-base, auto, 0, 0, 0);
+    height:1PX;
+    width: 100%;
+    transform-origin: 50% 100%;
+    transform: scaleY(.5);
+  }
+}
+
+%topHairLine {
+  position: relative;
+  &:after {
+    @include scale-hairline-common($color-border-base, 0, 0, auto, 0);
+    height:1PX;
+    width: 100%;
+    transform-origin: 50% 50%;
+    transform: scaleY(.5);
+  }
+}
