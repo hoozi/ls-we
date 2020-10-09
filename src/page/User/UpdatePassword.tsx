@@ -4,6 +4,7 @@ import { View, Text } from '@tarojs/components';
 import { useDispatch } from 'react-redux';
 import { RematchDispatch, Models } from '@rematch/core';
 import { AtButton } from 'taro-ui';
+import TopBarPage from '../../layout/TopBarPage';
 import Password from './components/Password';
 import classNames from './style/index.module.scss';
 
@@ -44,7 +45,7 @@ const UpdatePassword:React.FC<any> = props => {
     user.updatePassword(passwordValues.current);
   },[passwordValues]);
   return (
-    <View>
+    <TopBarPage title='修改密码'>
       <View className={classNames.upPasswordItem}>
         <Text style='width: 100px;display:block'>旧密码</Text>
         <Password 
@@ -82,7 +83,7 @@ const UpdatePassword:React.FC<any> = props => {
           onClick={handleUpdatePassword}
         >提 交</AtButton>
       </View>
-    </View>
+    </TopBarPage>
   )
 }
 

@@ -58,11 +58,19 @@ export async function submitTask<T>(data:SubmitTask) {
   })
 }
 
-export async function queryTodoDetail<T>(data:TodoDetailParams) {
+export async function queryTodoDetail<T>(data:TodoDetailParams | number, type?:string) {
+  const serviceMap = {
+    'MaterialsApproval': `receive-plan-bill-detail/list-by-main-ids?${stringify(data)}`,
+    'PurchasingApproval': `purchase-work-bill-detail/list-by-main-ids?${stringify(data)}`,
+    'ReportForms': `energy-consumption/${data}`,
+    'TemporaryMaintenance': `temporary-repair-bill/${data}`,
+  }
   return request<T>({
-    url: `/biz/receive-plan-bill-detail/list-by-main-ids?${stringify(data)}`,
+    url: `/biz/${serviceMap[type!]}`,
     method: 'GET',
     loadingText: '查询中...',
     onlyData: true
-  })
+  });
 }
+
+

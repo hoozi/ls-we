@@ -30,6 +30,11 @@ interface Type {
   }
 }
 
+export interface TabItem {
+  title: string;
+  value: string
+}
+
 const buttons:ButtonItem[] = [
   {
     title: '办理',
@@ -57,17 +62,38 @@ const buttons:ButtonItem[] = [
   }
 ];
 
+export const tabList:TabItem[] = [
+  {
+    title: '物资领用',
+    value: 'MaterialsApproval'
+  },
+  {
+    title: '采购计划',
+    value: 'PurchasingApproval'
+  },
+  {
+    title: '报表',
+    value: 'ReportForms'
+  },
+  {
+    title: '临时维修',
+    value: 'TemporaryMaintenance'
+  }
+]
+
 const Review:React.FC<any> = props => {
-  props.setParams({
-    reset: {
-      current: 1
-    }
-  });
   const { review } = useDispatch<RematchDispatch<Models>>();
   const { loading } = useSelector((state:RootState) => state);
-  const reviewState = useSelector((state:RootState) => state.review)
+  const reviewState = useSelector((state:RootState) => state.review);
   const [ visible, setVisible ] = React.useState<boolean>(false);
   const [ layoutType, setLayoutType ] = React.useState<string>('comment');
+  const [ tabCurrent, setTabCurrent ] = React.useState<number>(0);
+  props.setParams({
+    reset: {
+      current: 1,
+      processName: tabList[tabCurrent].value
+    }
+  });
   const types:Type = {
     'comment': {
       title: '批注',
@@ -78,12 +104,21 @@ const Review:React.FC<any> = props => {
       cls: 'note'
     }
   }
-  const Tags = types => (
+  const Tags = (types, key) => (
     types.length ? 
     types.map(type => (
-      type && <View className={classNames.tag}>{type}</View>
+      type && <View key={`${key}_${type}`} className={classNames.tag}>{type}</View>
     )) : null
-  )
+  );
+  const handleTabChange = React.useCallback(index => {
+    setTabCurrent(index);
+    props.setParams({
+      search: {
+        processName: tabList[index].value
+      }
+    });
+    props.getList('init');
+  }, []);
   return (
     <ListView 
       onReachBottom={props.reachBottom}
@@ -93,6 +128,9 @@ const Review:React.FC<any> = props => {
         title='审批'
         fixed
         onSearch={() => null}
+        tabList={tabList}
+        tabCurrent={tabCurrent}
+        onTabChange={handleTabChange}
         extra={<Text className='at-icon at-icon-filter' style='width:36px; font-size:16px;color:#999;text-align:center'/>}
       >
         {
@@ -108,7 +146,7 @@ const Review:React.FC<any> = props => {
                     onClick={() => {
                       if(button.action === 'todo') {
                         return Taro.navigateTo({
-                          url: `/page/Review/Todo?id=${item.taskId}&userId=${item.initiator}&deptName=${item.deptName}`
+                          url: `/page/Review/Todo?id=${item.taskId}&userId=${item.initiator}&deptName=${item.deptName}&type=${tabList[tabCurrent].value}`
                         })
                       };
                       setVisible(true);
@@ -135,11 +173,11 @@ const Review:React.FC<any> = props => {
                     actions={Actions}
                   >
                     <Card.Header 
-                      title={item.title}
+                      title={tabCurrent > 1 ? item.taskName : item.title}
                       subTitle={item.taskName}
                       extra={<Text className='icon icon-xiayiye' style='font-size: 18px; color: #666'/>}
                       onHeaderClick={() => Taro.navigateTo({
-                        url: `/page/Review/Detail?id=${item.taskId}`
+                        url: `/page/Review/Detail?id=${item.taskId}&type=${tabList[tabCurrent].value}`
                       })}
                     >
                       <View className={classNames.tagContainer}>
@@ -148,7 +186,7 @@ const Review:React.FC<any> = props => {
                             item.projectType,
                             item.applicationType,
                             item.procurementType
-                          ])
+                          ], item.taskId)
                         }
                       </View>
                     </Card.Header>
@@ -186,7 +224,7 @@ const Review:React.FC<any> = props => {
                   return (
                     <Timeline.Item label={Label} key={item.time}>
                       <View className={classNames.contentItem} style={{color: index === 0 ? color.successColor : '#333', fontWeight:'bold'}}>{item.fullMessage}</View>
-                      <View className={classNames.contentItem} style='color: #999'>{item.userId}{item.taskName ? `,【${item.taskName}】` : ''}</View>
+                      <View className={classNames.contentItem} style='color: #999; line-height: 22px'>{item.userId}{item.taskName ? `,【${item.taskName}】` : ''}</View>
                     </Timeline.Item>
                   )
                 })
@@ -199,4 +237,4 @@ const Review:React.FC<any> = props => {
   )
 }
 
-export default createList('todoList')(Review);
+export default createList('todoList', true)(Review);

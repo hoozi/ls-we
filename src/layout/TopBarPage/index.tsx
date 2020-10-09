@@ -84,7 +84,7 @@ const TopBarPage:React.FC<React.PropsWithChildren<PageHeaderProps>> = ({
         }
       </View>
       <View style={`
-        padding-top:${paddingTop}px;
+        padding-top:${!!!fixed ? 0 : paddingTop}px;
         height: 100vh;
         box-sizing: border-box;
       `}>

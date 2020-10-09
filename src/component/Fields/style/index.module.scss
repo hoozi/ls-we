@@ -9,9 +9,26 @@
     display: flex;
     align-items: center;
     color: #999;
+    margin-right: 8PX;
   }
   .fieldValue {
     flex: 1;
     color: #666;
+  }
+}
+
+.groupItem {
+  margin: 8PX;
+  border-radius: 6PX;
+  box-shadow: 0 0 6PX rgba(0,0,0,0.04);
+  background-color: #fff;
+  #{&}Title {
+    background-color:#fff7e6;
+    color:#fa8c16;
+    padding:8PX 12PX;
+    line-height: 1;
+  }
+  #{&}Content {
+    padding: 8PX 12PX;
   }
 }

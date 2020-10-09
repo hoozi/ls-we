@@ -1,4 +1,4 @@
 export default {
-  navigationBarTitleText: '办理',
+  navigationBarTitleText: '任务办理',
   navigationStyle: 'custom'
 }

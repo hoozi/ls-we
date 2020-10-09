@@ -1,17 +1,15 @@
 import * as React from 'react';
+import * as Taro from '@tarojs/taro-h5';
 import { parse } from 'qs';
 import { View, Text } from '@tarojs/components';
 import { useDispatch, useSelector } from 'react-redux';
 import { RematchDispatch, Models } from '@rematch/core';
 import { AtButton, AtFloatLayout, AtTextarea } from 'taro-ui';
 import { RootState } from '../../store';
-import useList from '../../hook/useList';
 import TopBarPage from '../../layout/TopBarPage';
-import Empty from '../../component/Empty';
-import Card from '../../component/Card';
-import Fields from '../../component/Fields';
 import BottomBar from '../../component/BottomBar';
 import classNames from './style/index.module.scss';
+import TaskDetail from '../../component/TaskDetail';
 
 const Todo:React.FC<any> = props => {
   const tid = props.tid;
@@ -19,20 +17,17 @@ const Todo:React.FC<any> = props => {
   const id = parseQuery['id'];
   const userId = parseQuery['userId'];
   const deptName = parseQuery['deptName'];
+  const type = parseQuery['type'];
   const [ visible, setVisible ] = React.useState<boolean>(false);
   const [ comment, setComment ] = React.useState<string>('');
   const currentComment = React.useRef<string>('');
   const taskFlagIndex = React.useRef<number>(0);
   const { review } = useDispatch<RematchDispatch<Models>>();
-  const { task } = useSelector((state: RootState) => state.review);
-  const [ list ] = useList({
-    getList: review.fetchTodoDetail,
-    initParams: {
-      id
-    }
-  });
+  const { task, records } = useSelector((state: RootState) => state.review);
+  //const [approvalEditQuantitiesList, setApprovalEditQuantitiesList] = React.useState<any[]>([]);
+
   React.useEffect(() => {
-    currentComment.current = comment
+    currentComment.current = comment;
   }, [comment]);
   const handleShowFloatLayout = React.useCallback((flag?:boolean) => {
     setVisible(!!flag);
@@ -40,11 +35,24 @@ const Todo:React.FC<any> = props => {
   const handleSubmitTask = React.useCallback(() => {
     review.submitTask({
       ...task,
+      approvalEditQuantitiesList: records.map(item => ({id:item.id, approvalQuantity: item.applyQuantity})),
       comment: currentComment.current,
       isDefault: true,
       taskFlag: task.flagList[taskFlagIndex.current]
     });
-  }, [task, currentComment,taskFlagIndex.current])
+  }, [task, records, currentComment,taskFlagIndex.current]);
+  const handlePut = React.useCallback((data, index) => {
+    const applyQuantity = window.prompt('请输入审批数量', '');
+    if(applyQuantity) {
+      review.put({
+        data:{
+          ...data,
+          applyQuantity
+        }, 
+        index
+      });
+    }
+  }, [review]);
   return (
     <TopBarPage fixed title='任务办理'>
       {
@@ -59,54 +67,9 @@ const Todo:React.FC<any> = props => {
       }
       
       <View style='height: calc(100% - 72px);'>
-        {
-          list.length ? 
-          <View className='cardContainer cardBtnContainer'>
-          {
-            list.map(item => {
-              const TopBarContent = (
-                <React.Fragment>
-                  <Text className='icon icon-guige' style='font-size: 16px; margin-right:2px'/>
-                  <Text>{item.specification} / {item.quantity}{item.measureUnit}</Text>
-                </React.Fragment>
-              )
-              return (
-                <Card 
-                  topBar={TopBarContent}
-                  key={item.id}
-                >
-                  <Card.Header
-                    title={item.materialName}
-                    subTitle={item.materialCode}
-                    extra={
-                      <View style='line-height:1;text-align:right'>
-                        <View style='color: #faad14;font-size: 16px;'>{item.budgetAmount}元</View>
-                        <View style='color: #999; font-size: 12px;margin-top: 6px'>预计费用</View>
-                      </View>
-                    }
-                  />
-                  <Card.Body>
-                    <Fields
-                      data={item}
-                      labelWidth={48}
-                      rows={[
-                        {
-                          title: '用途',
-                          dataIndex: 'usage'
-                        },
-                        {
-                          title: '备注',
-                          dataIndex: 'remark'
-                        }
-                      ]}
-                    />
-                  </Card.Body>
-                </Card>
-              )
-            })
-          }
-          </View> : <Empty/>
-        }
+        <View className='cardBtnContainer'>
+          <TaskDetail onEdit={(data, index) => type === 'PurchasingApproval' ? handlePut(data,index) : null} tid={props.tid}/>
+        </View>
       </View>
       <BottomBar>
         <View className='button-group'>

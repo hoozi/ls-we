@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-export default (getFrom:string) => {
+export default (getFrom:string, isPage:boolean=false) => {
   return WarppedComponent => {
     class HOC extends React.PureComponent<any, any> {
       private currentPage:number = 1
@@ -13,7 +13,8 @@ export default (getFrom:string) => {
       private getFromMap = {
         'todoList':this.props.fetchTodo,
         'todoDetail':this.props.fetchTodoDetail,
-        'history': this.props.fetchHistory
+        'history': this.props.fetchHistory,
+        'historyDetail': this.props.fetchHistoryDetail
       }
       private setParams(params) {
         this.params = {
@@ -21,8 +22,8 @@ export default (getFrom:string) => {
           ...params
         }
       }
-      private parseList(records:any[], type:string = 'init') {
-        const list = type === 'add' ? [...this.state.list, ...records] : [...records];
+      private parseList(records:any, type:string = 'init') {
+        const list = type === 'add' ?  [...this.state.list, ...records] : [...records];
         this.setState({
           list
         });
@@ -30,7 +31,7 @@ export default (getFrom:string) => {
       public state = {
         list: []
       }
-      public componentDidShow() {
+      private initList() {
         this.setParams({
           ...this.params,
           search: {
@@ -38,6 +39,22 @@ export default (getFrom:string) => {
           }
         });
         this.getList('init');
+      }
+      public componentDidUpdate() {
+        const recordMap = {
+          todoList: this.props.review.records,
+          todoDetail: this.props.review.records,
+          history: this.props.history.records,
+          historyDetail: this.props.history.records
+        }
+        if(this.params.reset.type === 'PurchasingApproval') {
+          this.setState({
+            list: recordMap[getFrom]
+          });
+        }
+      }
+      public [`componentDid${isPage ? 'Show' : 'Mount'}`]() {
+        this.initList();
       }
       public getList(type) {
         if(type === 'init') {
@@ -48,17 +65,18 @@ export default (getFrom:string) => {
           current: this.currentPage,
           callback:(response) => {
             this.pages = response?.pages??0;
-            this.parseList(response.records, type);
+            if(Array.isArray(response.records)) {
+              this.parseList(response.records, type);
+            } else {
+              this.setState({
+                list: response.records
+              })
+            }
           }
         });
       }
       public pullDownRefresh(){
-        this.setParams({
-          search: {
-            ...this.params.reset
-          }
-        });
-        this.getList('init');
+        this.initList();
       }
       public reachBottom() {
         if(this.pages <= this.currentPage) {
@@ -68,7 +86,7 @@ export default (getFrom:string) => {
         };
         this.getList('add');
       }
-      render() {
+      public render() {
         const { list } = this.state;
         const publicMethods = {
           getList: this.getList.bind(this),
@@ -82,7 +100,10 @@ export default (getFrom:string) => {
       }
     }
     return connect(
-      () => ({}), 
+      ({review, history}) => ({
+        review,
+        history
+      }), 
       ({review, history}) => ({
         ...review,
         ...history

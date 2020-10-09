@@ -146,11 +146,12 @@
   padding-bottom: calc(env(safe-area-inset-bottom) + 8PX);
   box-sizing: border-box;
   //height: 100%;
-  &.cardBtnContainer {
-    padding-bottom: 80PX;
-    padding-bottom: calc(constant(safe-area-inset-bottom) + 80PX);
-    padding-bottom: calc(env(safe-area-inset-bottom) + 80PX);
-  }
+}
+.cardBtnContainer {
+  padding-bottom: 80PX;
+  padding-bottom: calc(constant(safe-area-inset-bottom) + 80PX);
+  padding-bottom: calc(env(safe-area-inset-bottom) + 80PX);
+  box-sizing: border-box;
 }
 
 .hfull {
@@ -287,8 +288,11 @@
     color: #999;
   }
 }
-
+.taro__actionSheet {
+  position: relative;
+  z-index: 20;
+}
 .taro__toast {
   position: relative;
-  z-index: 500;
+  z-index: 9999;
 }

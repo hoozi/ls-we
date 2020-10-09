@@ -1,6 +1,6 @@
 import { ModelEffects, ModelReducers, RematchDispatch, Models } from '@rematch/core';
 import { RootState } from '../index';
-import { queryHistory, queryNote } from '../../api/history';
+import { queryHistory, queryNote, queryHistroyTask, queryHistroyDetail } from '../../api/history';
 
 export type History = {
   records: any[];
@@ -50,6 +50,28 @@ const effects = (dispatch:RematchDispatch<Models>):ModelEffects<RootState> => ({
         });
       }
     } catch(e) {}
+  },
+  async fetchHistoryDetail(payload) {
+    const { id, callback } = payload;
+    try {
+      const task = await queryHistroyTask<any>(id);
+      if(task) {
+        const response = await queryHistroyDetail<any>({
+          parentId:task.id
+        });
+        if(response) {
+          this.save({
+            records: response
+          });
+          callback && callback({
+            records: response
+          });
+        }
+      }
+      
+    } catch(e) {
+      
+    }
   }
 })
 

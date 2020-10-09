@@ -14,6 +14,7 @@ import Loading from '../../component/Loading';
 import Timeline from '../../component/Timeline';
 import ListView from '../../component/ListView';
 import { color } from '../../constants';
+import { tabList } from '../Review';
 import classNames from './style/index.module.scss';
 
 interface ButtonItem {
@@ -50,17 +51,18 @@ const buttons:ButtonItem[] = [
 ];
 
 const History:React.FC<any> = props => {
-  props.setParams({
-    reset: {
-      current: 1
-    }
-  });
   const { history } = useDispatch<RematchDispatch<Models>>();
   const { loading } = useSelector((state:RootState) => state);
   const historyState = useSelector((state:RootState) => state.history);
-  
   const [ visible, setVisible ] = React.useState<boolean>(false);
   const [ layoutType, setLayoutType ] = React.useState<string>('note');
+  const [ tabCurrent, setTabCurrent ] = React.useState<number>(0);
+  props.setParams({
+    reset: {
+      current: 1,
+      processName: tabList[tabCurrent].value
+    }
+  });
   const types:Type = {
     'note': {
       title: '记录',
@@ -71,6 +73,15 @@ const History:React.FC<any> = props => {
       cls: 'jizhu'
     }
   };
+  const handleTabChange = React.useCallback(index => {
+    setTabCurrent(index);
+    props.setParams({
+      search: {
+        processName: tabList[index].value
+      }
+    });
+    props.getList('init');
+  }, []);
   const Tags = types => (
     types.length ? 
     types.map(type => (
@@ -85,6 +96,9 @@ const History:React.FC<any> = props => {
       <TopBarPage
         title='日志'
         fixed
+        tabList={tabList}
+        tabCurrent={tabCurrent}
+        onTabChange={handleTabChange}
         onSearch={() => null}
         extra={<Text className='at-icon at-icon-filter' style='width:36px; font-size:16px;color:#999;text-align:center'/>}
       >
@@ -100,9 +114,9 @@ const History:React.FC<any> = props => {
                     className={classNames.cardLink}
                     onClick={() => {
                       if(button.action === 'Comment') {
-                        return /* Taro.navigateTo({
-                          url: `/page/Review/Todo?id=${item.taskId}&userId=${item.initiator}&deptName=${item.deptName}`
-                        }) */
+                        return Taro.navigateTo({
+                          url: `/page/Review/Detail?id=${item.recordId}&type=${tabList[tabCurrent].value}&page=history`
+                        })
                       };
                       setVisible(true);
                       setLayoutType(button.action.toLowerCase());
@@ -180,7 +194,7 @@ const History:React.FC<any> = props => {
                   return (
                     <Timeline.Item label={Label} key={item.time}>
                       <View className={classNames.contentItem} style={{color: index === 0 ? color.successColor : '#333', fontWeight:'bold'}}>{item.fullMessage}</View>
-                      <View className={classNames.contentItem} style='color: #999'>{item.userId}{item.taskName ? `,【${item.taskName}】` : ''}</View>
+                      <View className={classNames.contentItem} style='color: #999; line-height: 22px'>{item.userId}{item.taskName ? `,【${item.taskName}】` : ''}</View>
                     </Timeline.Item>
                   )
                 })

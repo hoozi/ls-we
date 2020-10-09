@@ -29,6 +29,12 @@ const state:Review = {
 const reducers:ModelReducers<Review> = {
   save(state, payload) {
     return Object.assign({},state, payload);
+  },
+  put(state, payload) {
+    const { records } = state;
+    const { index, data } = payload;
+    records.splice(index, 1, data);
+    return Object.assign({}, state, { records })
   }
 }
 const effects = (dispatch:RematchDispatch<Models>):ModelEffects<RootState> => ({
@@ -97,16 +103,15 @@ const effects = (dispatch:RematchDispatch<Models>):ModelEffects<RootState> => ({
     }
   },
   async fetchTodoDetail(payload, rootState) {
-    const { id, callback } = payload;
+    const { id, type, page, callback } = payload;
     try {
-      const task = await queryTask<any>(id);
+      const task = page === 'history' ? {id} : await queryTask<any>(id);
       if(task) {
+        const params = type === 'ReportForms' || type === 'TemporaryMaintenance' ? task.id : { ids: task.id }
         this.save({
           task
         });
-        const response = await queryTodoDetail<any>({
-          ids:task.id
-        });
+        const response = await queryTodoDetail<any>(params, type);
         if(response) {
           this.save({
             records: response

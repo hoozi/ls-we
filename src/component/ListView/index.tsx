@@ -23,7 +23,7 @@ const ListView:React.FC<React.PropsWithChildren<ListViewProps>> = ({
   const handleTouchMove = (evt: TouchEvent) => {
     const y = evt.touches[0].clientY;
     const currentDis = y-initialY.current;
-    if( currentDis > 60 && dom.current.scrollTop === 0) {
+    if( currentDis > 32 && dom.current.scrollTop === 0) {
       pull.current = true;
     }
   }

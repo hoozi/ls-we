@@ -14,7 +14,20 @@ interface FieldsProps {
   labelWidth?: number;
 }
 
-const Fields:React.FC<FieldsProps> = ({
+interface GroupProps {
+  group: {
+    title: string,
+    rows: Row[]
+  };
+  data: any;
+  labelWidth?: number;
+}
+
+interface FieldsInterface extends React.FC<FieldsProps> {
+  Group: typeof GroupFields
+}
+
+const Fields:FieldsInterface = ({
   data,
   rows,
   labelWidth=100
@@ -42,5 +55,26 @@ const Fields:React.FC<FieldsProps> = ({
     </View>
   )
 }
+
+const GroupFields:React.FC<GroupProps> = ({
+  data,
+  group,
+  labelWidth=100
+}) => {
+  return (
+    <View className={classNames.groupItem}>
+      <View className={classNames.groupItemTitle}>{group.title}</View>
+      <View className={classNames.groupItemContent}>
+        <Fields
+          data={data}
+          rows={group.rows}
+          labelWidth={labelWidth}
+        />
+      </View>
+    </View>
+  )
+}
+
+Fields.Group = GroupFields;
 
 export default Fields;
