@@ -127,7 +127,6 @@ const Review:React.FC<any> = props => {
       <TopBarPage
         title='审批'
         fixed
-        onSearch={() => null}
         tabList={tabList}
         tabCurrent={tabCurrent}
         onTabChange={handleTabChange}
