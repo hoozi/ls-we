@@ -41,6 +41,7 @@ export default (getFrom:string, isPage:boolean=false) => {
         this.getList('init');
       }
       public componentDidUpdate() {
+        
         const recordMap = {
           todoList: this.props.review.records,
           todoDetail: this.props.review.records,

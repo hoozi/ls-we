@@ -23,10 +23,10 @@ interface PageHeaderProps {
 
 const computedMargin = (tabList:any, onSearch:any):number => {
   if(!!tabList && !!onSearch) {
-    return 84+46;
+    return 46+38+46+4;
   }
   if(!!tabList) {
-    return 44+46;
+    return 46+46+4;
   }
   if(!!onSearch) {
    return 50+46;
@@ -42,19 +42,20 @@ const TopBarPage:React.FC<React.PropsWithChildren<PageHeaderProps>> = ({
   onTabChange,
   tabCurrent=0,
   fixed,
-  dark,
+  dark=true,
   children,
   headerRight,
   extra
 }) => {
   const topBarClassName = classnames(classNames.topBar, {
-    [`${classNames.topBarFixed}`]: !!fixed
+    [`${classNames.topBarFixed}`]: !!fixed,
+    [`${classNames.topDark}`]: dark
   });
   const paddingTop = React.useMemo(() => computedMargin(tabList, onSearch), [tabList, onSearch]);
   return (
     <View>
       <View className={topBarClassName} >
-        <View className={classNames.topHeader}>
+        <View className={classNames.topHeader} style={{color: !!dark ? '#fff' : ''}}>
           <View className={`${classNames.topHeaderLeft} icon icon-shangyiye`} onClick={() => Taro.navigateBack()}/>
           <View className={classNames.topHeaderTitle} style='flex:1'>{title}</View>
           <View className={classNames.topHeaderRight} style='width:46px'>{headerRight}</View>

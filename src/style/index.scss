@@ -2,6 +2,39 @@
 @import './mixin.scss';
 @import './icon.scss';
 
+$space:0,2,4,6,8,12,16,24,32,48,64,72,76;
+
+@for $i from 1 through length($space) {
+  $item: nth($space, $i);
+  .mt#{$item} {
+    margin-top: $item+0PX !important;
+  }
+  .mb#{$item} {
+    margin-bottom: $item+0PX !important;
+  }
+  .ml#{$item} {
+    margin-left: $item+0PX !important;
+  }
+  .mr#{$item} {
+    margin-right: $item+0PX !important;
+  }
+  .p#{$item} {
+    padding: $item+0PX !important;
+  }
+  .pt#{$item} {
+    padding-top: $item+0PX !important;
+  }
+  .pb#{$item} {
+    padding-bottom: $item+0PX !important;
+  }
+  .pl#{$item} {
+    padding-left: $item+0PX !important;
+  }
+  .pr#{$item} {
+    padding-right: $item+0PX !important;
+  }
+}
+
 %baseLayoutHeight {
   max-height: 80vh;
   min-height: 80vh;
@@ -170,7 +203,7 @@
 }
 
 .at-frozen {
-  overflow: hidden;
+ // overflow: hidden;
 }
 
 .at-float-layout__container {
@@ -295,4 +328,73 @@
 .taro__toast {
   position: relative;
   z-index: 9999;
+}
+
+.at-action-sheet__item,
+.at-action-sheet__footer {
+  font-size: 14PX !important;
+}
+.at-input {
+  padding: 8PX 0 !important;
+  margin-left: 12PX;
+  .at-input__icon {
+    width: 14PX;
+    height: 14PX;
+    font-size: 14PX;
+    margin-right: 8PX;
+  }
+}
+.at-input__title {
+  margin-right: 6PX;
+  width: 90PX;
+  font-size: 14PX;
+}
+.at-input__input {
+  padding-right: 6PX;
+  font-size: 14PX;
+  margin-left: 0;
+}
+.at-input__input input {
+  font-size: 14PX;
+  height: 100%;
+}
+.at-radio__option {
+  padding-left: 12PX;
+}
+.at-radio__option-wrap {
+  padding:8PX 12PX 8PX 0;
+}
+.at-radio__title {
+  font-size: 14PX;
+}
+.at-radio__desc {
+  font-size: 12PX;
+}
+.at-radio__icon {
+  font-size: 14PX;
+}
+.at-list__item {
+  padding:8PX 12PX;
+  font-size: 14PX;
+  .at-list__item-content {
+    margin-right: 8PX;
+    width: 90PX;
+    flex: none;
+    .item-content__info-title {
+      white-space:normal;
+    }
+  }
+  .item-extra__icon-arrow {
+    font-size: 14PX;
+  }
+  .at-list__item-extra {
+    max-width: 1000PX;
+    text-align: left;
+    flex: 1;
+  }
+  .item-extra__info {
+    font-size: 14PX;
+    padding-right: 0;
+    white-space: normal;
+  }
 }

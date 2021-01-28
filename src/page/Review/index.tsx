@@ -68,16 +68,16 @@ export const tabList:TabItem[] = [
     value: 'MaterialsApproval'
   },
   {
-    title: '采购计划',
+    title: '采购审批',
     value: 'PurchasingApproval'
   },
   {
-    title: '报表',
+    title: '能耗报表',
     value: 'ReportForms'
   },
   {
-    title: '临时维修',
-    value: 'TemporaryMaintenance'
+    title: '维修审批',
+    value: 'Maintenance'
   }
 ]
 
@@ -131,7 +131,6 @@ const Review:React.FC<any> = props => {
         tabList={tabList}
         tabCurrent={tabCurrent}
         onTabChange={handleTabChange}
-        extra={<Text className='at-icon at-icon-filter' style='width:36px; font-size:16px;color:#999;text-align:center'/>}
       >
         {
           props.list.length ? 
@@ -177,7 +176,7 @@ const Review:React.FC<any> = props => {
                       subTitle={item.taskName}
                       extra={<Text className='icon icon-xiayiye' style='font-size: 18px; color: #666'/>}
                       onHeaderClick={() => Taro.navigateTo({
-                        url: `/page/Review/Detail?id=${item.taskId}&type=${tabList[tabCurrent].value}`
+                        url: `/page/Review/Todo?id=${item.taskId}&userId=${item.initiator}&deptName=${item.deptName}&type=${tabList[tabCurrent].value}&detail=1`
                       })}
                     >
                       <View className={classNames.tagContainer}>

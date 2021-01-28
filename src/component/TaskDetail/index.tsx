@@ -456,7 +456,7 @@ const TaskDetail:React.FC<any> = props => {
     ];
     return groups.map(item => <Group data={props.list} group={item} key={item.key} labelWidth={96}/>);
   }, [props.list]);
-  const TemporaryMaintenanceDetail = React.useMemo(() => {
+  const MaintenanceDetail = React.useMemo(() => {
     return (
       <View style={`
         margin: 8px; 
@@ -475,7 +475,7 @@ const TaskDetail:React.FC<any> = props => {
   }, [props.list])
   const compMap = React.useMemo<{[key:string]:any}>(() => ({
     ReportForms: ReportFormsDetail,
-    TemporaryMaintenance: TemporaryMaintenanceDetail
+    Maintenance: MaintenanceDetail
   }), [ReportFormsDetail]);
   return (
     Array.isArray(props.list) ? 

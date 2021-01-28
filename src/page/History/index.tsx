@@ -99,8 +99,6 @@ const History:React.FC<any> = props => {
         tabList={tabList}
         tabCurrent={tabCurrent}
         onTabChange={handleTabChange}
-        onSearch={() => null}
-        extra={<Text className='at-icon at-icon-filter' style='width:36px; font-size:16px;color:#999;text-align:center'/>}
       >
         {
           props.list.length ? 
@@ -115,7 +113,7 @@ const History:React.FC<any> = props => {
                     onClick={() => {
                       if(button.action === 'Comment') {
                         return Taro.navigateTo({
-                          url: `/page/Review/Detail?id=${item.recordId}&type=${tabList[tabCurrent].value}&page=history`
+                          url: `/page/Review/Todo?id=${item.recordId}&userId=${item.assignee}&deptName=${item.deptName}&type=${tabList[tabCurrent].value}&detail=1&page=history`
                         })
                       };
                       setVisible(true);

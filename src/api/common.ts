@@ -17,3 +17,21 @@ export async function uploadFile(data) {
   })
 }
 
+export async function queryMaterial<T>() {
+  return request<T>({
+    url: '/biz/base-material/list',
+    method: 'GET',
+    onlyData: true
+  })
+}
+
+export async function queryDicForRepair<T>(type:string) {
+  const _type = type.replace(/([A-Z])/g,'_$1').toLowerCase();
+  return request<T>({
+    url: `/admin/dict/type/${_type}`,
+    method: 'GET',
+    onlyData: true
+  })
+}
+
+

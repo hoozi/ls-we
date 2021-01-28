@@ -2,14 +2,15 @@ import * as React from 'react';
 import { View, Text } from '@tarojs/components';
 import classNames from './style/index.module.scss';
 
-interface Row {
+export interface Row {
   title: React.ReactNode;
   dataIndex: string;
   render?(value?:string, rows?:any):React.ReactNode;
+  hide?:boolean | ((value?:string, rows?:any)=>boolean);
 }
 
 interface FieldsProps {
-  data:any[];
+  data:any;
   rows: Row[];
   labelWidth?: number;
 }
@@ -38,7 +39,9 @@ const Fields:FieldsInterface = ({
         rows && rows.length ?
         rows.map(item => {
           const value = data[item.dataIndex];
+          const hideRow = typeof item.hide === 'function' ? item.hide(value, data) : item.hide;
           return (
+            !!!hideRow &&
             <View className={classNames.field} key={item.dataIndex}>
               <View className={classNames.fieldName} style={`width: ${labelWidth}px`}>{item.title}</View>
               <View className={classNames.fieldValue}>

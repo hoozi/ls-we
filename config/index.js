@@ -1,4 +1,4 @@
-const proxyUrl = 'http://118.31.6.176:6001';
+const proxyUrl = 'http://118.31.6.176:6001';//'http://118.31.6.176:6001';
 const localPath = '/';
 
 const serviceList = [

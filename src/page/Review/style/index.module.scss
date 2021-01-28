@@ -60,7 +60,7 @@
 .taskCard {
   @extend %bottomHairLine;
   background-color: #fff;
-  padding:12PX 12PX 24PX;
+  padding:12PX;
   .taskTitle {
     font-weight: bold;
     font-size: 14PX;
@@ -74,4 +74,77 @@
     padding:8PX;
     line-height: 1;
   }
+}
+
+.round {
+  border-radius: 100PX !important;
+}
+
+.todoCard {
+  margin: 0 12PX 12PX;
+  background-color: #fff;
+  border-radius: 6PX;
+  overflow: hidden;
+  box-shadow: 0 0 6PX rgba(0,0,0,0.04);
+  &:first-child {
+    margin-top: 12PX;
+  }
+  .todoCardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12PX 12PX 0;
+  }
+  .todoCardBody {
+    padding: 12PX;
+    .todoCardContent {
+      padding:8PX 12PX;
+      border-radius: 6PX;
+      background-color: #f9f9f5;
+      color: rgba(0,0,0,0.65);
+    }
+  }
+}
+
+.addBtn {
+  margin: 12PX;
+  box-sizing: border-box;
+  text-align: center;
+  line-height: 36PX;
+  font-size: 14PX;
+  width: calc(100% - 24PX);
+  height: 36PX;
+  background-color: #fff;
+  color: $color-brand;
+}
+
+.selectBtn {
+  color: $color-brand !important;
+  font-size: 14PX !important;
+  padding:0 12PX !important;
+}
+
+.searchBar {
+  padding: 12PX;
+  background-color: #fff;
+  .searchBarInner {
+    display: flex;
+    align-items: center;
+    background-color: #f5f5f5;
+    padding:6PX 12PX;
+    border-radius: 4PX;
+    .searchBarInput {
+      flex: 1;
+      margin-left: 8PX;
+      height: 100%;
+    }
+  }
+}
+
+.postBtn {
+  margin: 12PX;
+  height: 42PX;
+  line-height: 42PX;
+  padding: 0 12PX;
+  font-size: 14PX;
 }

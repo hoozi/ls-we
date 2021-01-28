@@ -10,7 +10,11 @@
     z-index: 11;
   }
 }
-
+.topDark {
+  &.topBar > .topHeader {
+    background-color: #455fe4
+  }
+}
 .topHeader {
   height:46PX;
   text-align:center;

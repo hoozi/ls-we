@@ -7,8 +7,6 @@ import TaskDetail from '../../component/TaskDetail';
 import Fields from '../../component/Fields';
 //import classNames from './style/index.module.scss';
 
-
-
 const Detail:React.FC<any> = props => {
   return (
     <TopBarPage 

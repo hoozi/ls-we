@@ -21,7 +21,8 @@ export default {
       pages: [
         'index',
         'Detail',
-        'Todo'
+        'Todo',
+        'EditTodo'
       ]
     },
     {

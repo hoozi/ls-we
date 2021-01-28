@@ -1,6 +1,6 @@
 import { ModelEffects, ModelReducers } from '@rematch/core';
 import { RootState } from '../index';
-import { uploadFile } from '../../api/common';
+import { uploadFile, queryMaterial, queryDicForRepair } from '../../api/common';
 import * as Taro from '@tarojs/taro';
 
 /* interface User {
@@ -14,15 +14,32 @@ import * as Taro from '@tarojs/taro';
 } */
 
 export type Common = {
-  
+  material:any[];
+  filteredMaterial: any[];
+  accidentType: any[];
+  repairWay: any[];
+  repairType: any[];
+  maintenancePlace: any[];
 }
 
 const state:Common = {
-  
+  material: [],
+  filteredMaterial: [],
+  accidentType: [],
+  repairType: [],
+  repairWay: [],
+  maintenancePlace: []
 }
 const reducers:ModelReducers<Common> = {
   save(state, payload) {
     return Object.assign({},state, payload);
+  },
+  filter(state, payload) {
+    const filteredMaterial = state.material.filter(item => {
+      return item._key.indexOf(payload) > -1
+    }).slice(0, 20);
+    console.log(filteredMaterial)
+    return Object.assign({}, state, { filteredMaterial })
   }
 }
 const effects:ModelEffects<RootState> = {
@@ -51,6 +68,35 @@ const effects:ModelEffects<RootState> = {
       }
     } catch(e) {
       
+    }
+  },
+  async fetchMaterial() {
+    try {
+      const response = await queryMaterial<any[]>();
+      if(response) {
+        const material = response.map(item => ({...item,_key: `${item.name}.${item.code}`}))
+        this.save({
+          material,
+          filteredMaterial: material.slice(0, 20)
+        })
+      }
+    } catch(e) {} 
+  },
+  async fetchDicForRepair() {
+    const types = ['accidentType', 'repairType','repairWay', 'maintenancePlace'];
+    try {
+      const services = types.map(async item => await queryDicForRepair(item));
+      const [accidentType, repairType, repairWay,maintenancePlace] = await Promise.all(services);
+      this.save({
+        accidentType, repairType, repairWay,maintenancePlace
+      });
+    } catch {
+      this.save({
+        accidentType: [],
+        repairType: [],
+        repairWay: [],
+        maintenancePlace: []
+      })
     }
   }
   /* async fetchOpenId() {

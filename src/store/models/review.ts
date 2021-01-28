@@ -1,7 +1,7 @@
 import * as Taro from '@tarojs/taro-h5';
 import { ModelEffects, ModelReducers, RematchDispatch, Models } from '@rematch/core';
 import { RootState } from '../index';
-import { queryTodo, queryComment, queryNote, queryTask, queryTodoDetail, submitTask } from '../../api/review';
+import { queryTodo, queryComment, queryNote, queryTask, queryTodoDetail, submitTask, deleteTodo, postTodo, queryCountInWarehouse } from '../../api/review';
 
 export type Review = {
   records: any[];
@@ -11,6 +11,7 @@ export type Review = {
   current: number;
   comments: any[];
   notes: any[];
+  refresh: boolean;
   task: {
     [key:string]: any;
   };
@@ -23,6 +24,7 @@ const state:Review = {
   notes: [],
   total: 0,
   size: 10,
+  refresh: true,
   pages: 0,
   current: 1
 }
@@ -83,7 +85,6 @@ const effects = (dispatch:RematchDispatch<Models>):ModelEffects<RootState> => ({
   },
   async submitTask(payload) {
     try {
-      const effect = this;
       const response = await submitTask<any>(payload);
       if(response.code === 0) {
         Taro.showToast({
@@ -98,25 +99,28 @@ const effects = (dispatch:RematchDispatch<Models>):ModelEffects<RootState> => ({
           }
         })
       }
-    } catch(e) {
-      
-    }
+    } catch(e) {}
   },
   async fetchTodoDetail(payload, rootState) {
     const { id, type, page, callback } = payload;
+    this.save({
+      records: []
+    });
     try {
       const task = page === 'history' ? {id} : await queryTask<any>(id);
       if(task) {
-        const params = type === 'ReportForms' || type === 'TemporaryMaintenance' ? task.id : { ids: task.id }
+        const params = type === 'ReportForms' || type === 'Maintenance' ? task.id : { ids: task.id }
         this.save({
           task
         });
-        const response = await queryTodoDetail<any>(params, type);
+        const response = await queryTodoDetail<any>(params, type === 'Maintenance' ? task.identify : type);
         if(response) {
           this.save({
-            records: response
+            records: response,
+            refresh: false
           });
           callback && callback({
+            task,
             records: response
           });
         }
@@ -124,6 +128,58 @@ const effects = (dispatch:RematchDispatch<Models>):ModelEffects<RootState> => ({
       
     } catch(e) {
       
+    }
+  },
+  async postTodo(payload) {
+    try {
+      const response = await postTodo<any>(payload);
+      if(response.code === 0) {
+        Taro.showToast({
+          title: '提交成功',
+          icon: 'success',
+          mask: true,
+          duration: 2000,
+          success() {
+            setTimeout(() => {
+              Taro.navigateBack();
+            }, 2000);
+          }
+        })
+      }
+    } catch(e) {}
+  },
+  async deleteTodo(payload) {
+    try {
+      const effect = this;
+      console.log(effect)
+      const { pid, type, id } = payload
+      const response = await deleteTodo<any>(id);
+      if(response.code === 0) {
+        Taro.showToast({
+          title: '删除成功',
+          icon: 'success',
+          mask: true,
+          duration: 2000,
+          success() {
+            setTimeout(() => {
+              effect.fetchTodoDetail({
+                id: pid,
+                type
+              });
+            }, 2000);
+          }
+        })
+      }
+    } catch(e) {}
+  },
+  async fetchCountInWarehouse(payload) {
+    const { callback, ...restPayload } = payload;
+    try {
+      const response = await queryCountInWarehouse<any[]>(restPayload.id);
+      console.log(response)
+      callback && callback(response.reduce((sum, cur) => sum+cur.quantity,0))
+    } catch(e) {
+      callback && callback(0)
     }
   }
 })
