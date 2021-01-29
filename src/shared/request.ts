@@ -117,11 +117,12 @@ export default function request<T>(options: Options): Promise<T> {
       });
       throw response;
     })
-    .catch((e) => {
+    .catch(async (e) => {
       Taro.hideLoading();
+      const data = await e.json();
       if(e.status === 500) {
         return TaroH5.showToast({
-          title: e.data.msg,
+          title: data.msg || '服务器错误',
           icon: 'none',
           mask: true
         });

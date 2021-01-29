@@ -79,7 +79,7 @@ const Todo:React.FC<{tid: string}> = props => {
   });
 
   Taro.useDidShow(() => {
-    currentRow.current = [];
+    setRows([]);
     review.fetchTodoDetail({
       id,
       type,
@@ -142,7 +142,9 @@ const Todo:React.FC<{tid: string}> = props => {
        case taskName.indexOf('物资审批 - 机务员、班组所属部门长审批') > -1:
         return handlePut(item, index, 0);
        case taskName.indexOf('物资审批 - 船长、班组长、部门长审批') > -1:
-        return handlePut(item, index, 1);;
+        return handlePut(item, index, 1);
+        case taskName.indexOf('办公室主任审批') > -1:
+          return handlePut(item, index, 1);
      }
      return null;
   }, [task.taskName])
