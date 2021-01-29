@@ -203,7 +203,7 @@ const Todo:React.FC<{tid: string}> = props => {
                 records.map((item, index) => {
                   const taskName = task?.taskName;
                   let _item = item;
-                  if(task?.identify !== 'MaterialsApproval' && task?.identify !== 'OfficeMaterialsApproval') {
+                  if(task?.identify === 'MaterialsApproval' || task?.identify === 'OfficeMaterialsApproval') {
                     switch(true) {
                       case taskName.indexOf('物资审批 - 机务员、班组所属部门长审批') > -1:
                         _item = {...item, flightAuditCount: item.captainAuditCount}
@@ -213,11 +213,12 @@ const Todo:React.FC<{tid: string}> = props => {
                         _item = {...item, flightAuditCount: item.captainAuditCount}
                     }
                   }
+                  console.log(_item)
                   return (
                     <TodoCard
                       key={item.id || index}
                       title={item.receiveBillNo}
-                      data={item}
+                      data={_item}
                       checked={currentRow.current.indexOf(item) > -1}
                       checkable={task.taskName?.indexOf('物资审批 - 仓库保管员审批') > -1 && item.outWarehouseStatus === '未出库' && detail === '0'}
                       rows={todoRows}
