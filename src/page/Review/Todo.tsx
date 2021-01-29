@@ -213,7 +213,6 @@ const Todo:React.FC<{tid: string}> = props => {
                         _item = {...item, flightAuditCount: item.captainAuditCount}
                     }
                   }
-                  console.log(_item)
                   return (
                     <TodoCard
                       key={item.id || index}
