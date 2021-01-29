@@ -117,15 +117,30 @@ const Todo:React.FC<{tid: string}> = props => {
     });
   }, [task, records, comment, taskAction.current, maintenanceValue]);
   const handlePut = React.useCallback((data, index, type) => {
-    const applyQuantity = window.prompt(
-      type === 1 ? '请输入船长/部门长审批数量' : 
-      '机务员/办公室主任审批数量', 
-      type === 1 ? data.quantity : data.captainAuditCount);
+    const map = [
+      {
+        placeholder: '机务员/办公室主任审批数量',
+        field: 'flightAuditCount',
+        default: data.captainAuditCount
+      },
+      {
+        placeholder: '请输入船长/部门长审批数量',
+        field: 'captainAuditCount',
+        default: data.quantity
+      },
+      {
+        placeholder: '机务员/办公室主任审批数量',
+        field: 'flightAuditCount',
+        default: data.captainAuditCount
+      }
+    ];
+    const current = map[type];
+    const applyQuantity = window.prompt(current.placeholder, current.default);
     if(applyQuantity) {
       review.put({
         data:{
           ...data,
-          [type === 1 ? 'captainAuditCount' : 'flightAuditCount']: applyQuantity
+          [`${current.field}`]: applyQuantity
         }, 
         index
       });
@@ -144,7 +159,7 @@ const Todo:React.FC<{tid: string}> = props => {
        case taskName.indexOf('物资审批 - 船长、班组长、部门长审批') > -1:
         return handlePut(item, index, 1);
         case taskName.indexOf('办公室主任审批') > -1:
-          return handlePut(item, index, 1);
+          return handlePut(item, index, 0);
      }
      return null;
   }, [task.taskName])
@@ -186,6 +201,18 @@ const Todo:React.FC<{tid: string}> = props => {
                 /> :
                 records && records.length ?
                 records.map((item, index) => {
+                  const taskName = task?.taskName;
+                  let _item = item;
+                  if(task?.identify !== 'MaterialsApproval' && task?.identify !== 'OfficeMaterialsApproval') {
+                    switch(true) {
+                      case taskName.indexOf('物资审批 - 机务员、班组所属部门长审批') > -1:
+                        _item = {...item, flightAuditCount: item.captainAuditCount}
+                      case taskName.indexOf('物资审批 - 船长、班组长、部门长审批') > -1:
+                        _item = {...item, captainAuditCount: item.quantity}
+                      case taskName.indexOf('办公室主任审批') > -1:
+                        _item = {...item, flightAuditCount: item.captainAuditCount}
+                    }
+                  }
                   return (
                     <TodoCard
                       key={item.id || index}
