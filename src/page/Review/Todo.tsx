@@ -26,6 +26,7 @@ const Todo:React.FC<{tid: string}> = props => {
   const [ maintenanceValue, setMaintenanceValue ] = React.useState<any>(maintenanceValueForState)
   const taskAction = React.useRef<string>('');
   const currentId = React.useRef<number>(-1);
+  const currentRecords = React.useRef<any[]>([]);
   const { review } = useDispatch<RematchDispatch<Models>>();
   const { task, records } = useSelector((state: RootState) => state.review);
   const currentRow = React.useRef<any>([]);
@@ -77,7 +78,6 @@ const Todo:React.FC<{tid: string}> = props => {
   React.useEffect(() => {
     currentRow.current = rows;
   });
-
   Taro.useDidShow(() => {
     setRows([]);
     review.fetchTodoDetail({
@@ -159,7 +159,7 @@ const Todo:React.FC<{tid: string}> = props => {
        case taskName.indexOf('物资审批 - 船长、班组长、部门长审批') > -1:
         return handlePut(item, index, 1);
         case taskName.indexOf('办公室主任审批') > -1:
-          return handlePut(item, index, 0);
+          return handlePut(item, index, 2);
      }
      return null;
   }, [task.taskName])
@@ -203,14 +203,18 @@ const Todo:React.FC<{tid: string}> = props => {
                 records.map((item, index) => {
                   const taskName = task?.taskName;
                   let _item = item;
+                 
                   if(task?.identify === 'MaterialsApproval' || task?.identify === 'OfficeMaterialsApproval') {
                     switch(true) {
                       case taskName.indexOf('物资审批 - 机务员、班组所属部门长审批') > -1:
-                        _item = {...item, flightAuditCount: item.captainAuditCount}
+                        _item = {...item, flightAuditCount: item.flightAuditCount || item.captainAuditCount}
+                        break;
                       case taskName.indexOf('物资审批 - 船长、班组长、部门长审批') > -1:
-                        _item = {...item, captainAuditCount: item.quantity}
+                        _item = {...item, captainAuditCount: item.captainAuditCount || item.quantity}
+                        break;
                       case taskName.indexOf('办公室主任审批') > -1:
-                        _item = {...item, flightAuditCount: item.captainAuditCount}
+                        _item = {...item, flightAuditCount: item.flightAuditCount || item.captainAuditCount}
+                        break;
                     }
                   }
                   return (
