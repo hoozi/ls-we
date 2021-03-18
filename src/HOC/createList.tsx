@@ -14,7 +14,8 @@ export default (getFrom:string, isPage:boolean=false) => {
         'todoList':this.props.fetchTodo,
         'todoDetail':this.props.fetchTodoDetail,
         'history': this.props.fetchHistory,
-        'historyDetail': this.props.fetchHistoryDetail
+        'historyDetail': this.props.fetchHistoryDetail,
+        'requisition': this.props.fetchRequisition
       }
       private setParams(params) {
         this.params = {
@@ -101,13 +102,15 @@ export default (getFrom:string, isPage:boolean=false) => {
       }
     }
     return connect(
-      ({review, history}) => ({
+      ({review, history, requisition}) => ({
         review,
-        history
+        history,
+        requisition
       }), 
-      ({review, history}) => ({
+      ({review, history, requisition}) => ({
         ...review,
-        ...history
+        ...history,
+        ...requisition
       })
     )(HOC);
   }

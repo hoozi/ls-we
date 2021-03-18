@@ -30,6 +30,13 @@ export default {
       pages: [
         'index'
       ]
+    },
+    {
+      root: 'page/Requisition',
+      pages: [
+        'index',
+        'Detail'
+      ]
     }
   ],
   window: {

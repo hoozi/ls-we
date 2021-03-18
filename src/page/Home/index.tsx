@@ -58,7 +58,7 @@ export default () => {
               <View className={classNames.menuItem} key={m.url} onClick={()=> Taro.navigateTo({
                 url: m.url
               })}>
-                <View style='width: 42px'>
+                <View style='width: 100%; display:flex; justify-content: center; align-items:center; flex-direction: column; '>
                   <View className={classNames.menuIcon} style={`background-color:${m.iconInfo.color}`}>
                     <Text style={`font-size:${m.iconInfo.size}px`} className={`icon ${m.iconInfo.prefixClass}-${m.iconInfo.value}`}/>
                   </View>

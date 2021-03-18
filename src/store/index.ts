@@ -18,12 +18,14 @@ import common, { Common as CommonState } from './models/common';
 import history, { History as HistoryState } from './models/history';
 import user, { User as UserState } from './models/user';
 import review, { Review as ReviewState } from './models/review';
+import requisition, { Requisition as RequisitionState } from './models/requisition';
 
 const models = {
   common,
   history,
   user,
-  review
+  review,
+  requisition
 }
 
 export type RootModels = typeof models;
@@ -44,6 +46,7 @@ export type RootState = {
   user: UserState;
   review: ReviewState;
   loading: LoadingState<any>;
+  requisition: RequisitionState;
 }
 
 const store:RematchStore = init({
