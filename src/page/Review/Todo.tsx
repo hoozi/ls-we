@@ -103,7 +103,7 @@ const Todo:React.FC<{tid: string}> = props => {
   const handleSubmitTask = React.useCallback(() => {
     if(taskAction.current === '通知领取') {
       if(!rows.length) return Taro.showToast({
-        title: '前选择领用物资',
+        title: '请选择领用物资',
         icon: 'none',
         mask: true
       })
@@ -199,21 +199,24 @@ const Todo:React.FC<{tid: string}> = props => {
                   updater={setMaintenanceValue} 
                   formValue={maintenanceValue[task?.identify]}
                 /> :
-                records && records.length ?
+                (records && records.length) ?
                 records.map((item, index) => {
                   const taskName = task?.taskName;
-                  let _item = item;
+                  //let _item = item;
                  
                   if(task?.identify === 'MaterialsApproval' || task?.identify === 'OfficeMaterialsApproval') {
                     switch(true) {
                       case taskName.indexOf('物资审批 - 机务员、班组所属部门长审批') > -1:
-                        _item = {...item, flightAuditCount: item.flightAuditCount || item.captainAuditCount}
+                        //_item = {...item, flightAuditCount: item.flightAuditCount || item.captainAuditCount}
+                        item.flightAuditCount = item.flightAuditCount || item.captainAuditCount;
                         break;
                       case taskName.indexOf('物资审批 - 船长、班组长、部门长审批') > -1:
-                        _item = {...item, captainAuditCount: item.captainAuditCount || item.quantity}
+                       // _item = {...item, captainAuditCount: item.captainAuditCount || item.quantity}
+                        item.captainAuditCount = item.captainAuditCount || item.quantity;
                         break;
                       case taskName.indexOf('办公室主任审批') > -1:
-                        _item = {...item, flightAuditCount: item.flightAuditCount || item.captainAuditCount}
+                        //_item = {...item, flightAuditCount: item.flightAuditCount || item.captainAuditCount}
+                        item.flightAuditCount = item.flightAuditCount || item.captainAuditCount
                         break;
                     }
                   }
@@ -221,7 +224,7 @@ const Todo:React.FC<{tid: string}> = props => {
                     <TodoCard
                       key={item.id || index}
                       title={item.receiveBillNo}
-                      data={_item}
+                      data={item}
                       checked={currentRow.current.indexOf(item) > -1}
                       checkable={task.taskName?.indexOf('物资审批 - 仓库保管员审批') > -1 && item.outWarehouseStatus === '未出库' && detail === '0'}
                       rows={todoRows}
