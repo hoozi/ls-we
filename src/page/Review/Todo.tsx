@@ -72,6 +72,11 @@ const Todo:React.FC<{tid: string}> = props => {
       title: '机务员/办公室主任审批数量',
       dataIndex: 'flightAuditCount',
       hide: task?.identify !== 'MaterialsApproval' && task?.identify !== 'OfficeMaterialsApproval'
+    },
+    {
+      title: '机务员预估金额',
+      dataIndex: 'budgetAmount',
+      hide: (value, data) => task?.taskName.indexOf('物资审批 - 机务员、班组所属部门长审批') > -1 && data.type !== '进口物资'
     }
   ]
 
@@ -100,6 +105,16 @@ const Todo:React.FC<{tid: string}> = props => {
   const handleShowFloatLayout = React.useCallback((flag?:boolean) => {
     setVisible(!!flag);
   }, []);
+  const handleUpdateTask = () => {
+    const changeValue = window.prompt('机务员预估总金额', records.filter(item => item.type === '进口物资').reduce((sum, cur) => sum+cur.budgetAmount, 0));
+    if(changeValue) {
+      review.put({
+        task: {
+          budgetAmount: changeValue
+        }
+      });
+    }
+  }
   const handleSubmitTask = React.useCallback(() => {
     if(taskAction.current === '通知领取') {
       if(!rows.length) return Taro.showToast({
@@ -135,33 +150,33 @@ const Todo:React.FC<{tid: string}> = props => {
       }
     ];
     const current = map[type];
-    const applyQuantity = window.prompt(current.placeholder, current.default);
-    if(applyQuantity) {
+    const changeValue = window.prompt(current.placeholder, current.default);
+    if(changeValue) {
       review.put({
         data:{
           ...data,
-          [`${current.field}`]: applyQuantity
+          [`${current.field}`]: changeValue
         }, 
         index
       });
     }
   }, [review]);
   const getAction = React.useCallback((item,index) => {
-     const taskName = task?.taskName || '';
-     if(!taskName) return;
-     if(task?.identify !== 'MaterialsApproval' && task?.identify !== 'OfficeMaterialsApproval') return;
+    const taskName = task?.taskName || '';
+    if(!taskName) return;
+    if(task?.identify !== 'MaterialsApproval' && task?.identify !== 'OfficeMaterialsApproval') return;
       switch(true) {
-       case taskName.indexOf('物资审批 - 仓库保管员审批') > -1 && item.outWarehouseStatus === '未出库':
-        currentId.current = item.id;
-        return setEditButtonOpened(true);
-       case taskName.indexOf('物资审批 - 机务员、班组所属部门长审批') > -1:
-        return handlePut(item, index, 0);
-       case taskName.indexOf('物资审批 - 船长、班组长、部门长审批') > -1:
-        return handlePut(item, index, 1);
+        case taskName.indexOf('物资审批 - 物资部总管审批') > -1 && item.outWarehouseStatus === '未出库':
+          currentId.current = item.id;
+          return setEditButtonOpened(true);
+        case taskName.indexOf('物资审批 - 机务员、班组所属部门长审批') > -1:
+          return handlePut(item, index, item.type === '进口物资' ? 3 : 0);
+        case taskName.indexOf('物资审批 - 船长、班组长、部门长审批') > -1:
+          return handlePut(item, index, 1);
         case taskName.indexOf('办公室主任审批') > -1:
           return handlePut(item, index, 2);
-     }
-     return null;
+      }
+    return null;
   }, [task.taskName])
   return (
     <TopBarPage fixed title={detail==='0' ? '任务办理' : '任务详情'}>
@@ -175,15 +190,29 @@ const Todo:React.FC<{tid: string}> = props => {
           </View>
         </View> : null
       }
-      
       <View style='height: calc(100% - 72px);'>
         <View className='cardBtnContainer'>
           {
-            (task.taskName?.indexOf('物资审批 - 仓库保管员审批') > -1 && detail === '0') && 
+            (task.taskName?.indexOf('物资审批 - 物资部总管审批') > -1 && detail === '0') && 
             <View className={classNames.addBtn} onClick={() => Taro.navigateTo({
               url: `/page/Review/EditTodo?receivePlanBillId=${task?.id}`
             })}>
               <Text>新增</Text>
+            </View>
+          }
+          {
+            (
+              task.taskName?.indexOf('物资审批 - 机务员、班组所属部门长审批') > -1 && 
+              records.some(item => item.type === '进口物资')
+            ) && 
+            <View className='p12' onClick={() => detail === '0' ? handleUpdateTask() : null}>
+              <View className='warning-text'>
+                机务员预估总金额: ¥{records.filter(item => item.type === '进口物资').reduce((sum, cur) => sum+cur.budgetAmount, 0) || task?.budgetAmount || 0}
+                {
+                  detail === '0' &&
+                  <Text className={`icon icon-bianji ml4`}/>
+                }
+              </View>
             </View>
           }
           {
@@ -193,6 +222,7 @@ const Todo:React.FC<{tid: string}> = props => {
               <TaskDetail tid={props.tid}/> :
                 type === 'Maintenance' ?
                 <Maintenance 
+                  key={task?.id}
                   detail={detail==='1'} 
                   role={task?.taskName} 
                   identify={task?.identify} 
@@ -203,7 +233,6 @@ const Todo:React.FC<{tid: string}> = props => {
                 records.map((item, index) => {
                   const taskName = task?.taskName;
                   //let _item = item;
-                 
                   if(task?.identify === 'MaterialsApproval' || task?.identify === 'OfficeMaterialsApproval') {
                     switch(true) {
                       case taskName.indexOf('物资审批 - 机务员、班组所属部门长审批') > -1:
@@ -226,9 +255,9 @@ const Todo:React.FC<{tid: string}> = props => {
                       title={item.receiveBillNo}
                       data={item}
                       checked={currentRow.current.indexOf(item) > -1}
-                      checkable={task.taskName?.indexOf('物资审批 - 仓库保管员审批') > -1 && item.outWarehouseStatus === '未出库' && detail === '0'}
+                      checkable={task.taskName?.indexOf('物资审批 - 物资部总管审批') > -1 && item.outWarehouseStatus === '未出库' && detail === '0'}
                       rows={todoRows}
-                      headerExtra={task.taskName?.indexOf('物资审批 - 仓库保管员审批') > -1 ? <b style={{color:color.brandColor}}>{item.outWarehouseStatus}</b> : null}
+                      headerExtra={task.taskName?.indexOf('物资审批 - 物资部总管审批') > -1 ? <b style={{color:color.brandColor}}>{item.outWarehouseStatus}</b> : null}
                       onCardClick={() => {
                         if( detail === '1') return
                         return getAction(item, index)

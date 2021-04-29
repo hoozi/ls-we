@@ -9,9 +9,10 @@ interface ITodoCard {
   checkable: boolean;
   checked: boolean;
   title: string;
-  onCardClick?():void;
+  onCardClick?(e:MouseEvent):void;
   onChecked?():void;
   headerExtra?: React.ReactNode;
+  subHeader?: React.ReactNode;
   footer?:React.ReactNode;
 }
 
@@ -22,6 +23,7 @@ const TodoCard:React.FC<ITodoCard> = ({
   rows,
   title,
   headerExtra,
+  subHeader,
   footer,
   onCardClick,
   onChecked
@@ -31,22 +33,30 @@ const TodoCard:React.FC<ITodoCard> = ({
       { 
         ( title || headerExtra ) &&
         <View className={classNames.todoCardHeader}>
-        <span>
-          {
-            checkable &&
-            <Checkbox value={data.id} checked={checked} onClick={e => {
-              e.stopPropagation();
-              onChecked && onChecked()
-            }}/>
-          }
-          <b className='ml6'>{title}</b>
-        </span>
-        <div className={classNames.todoCardHeaderExtra}>{headerExtra}</div>
-      </View>
+          <span>
+            {
+              checkable &&
+              <Checkbox value={data.id} checked={checked} onClick={e => {
+                e.stopPropagation();
+                onChecked && onChecked()
+              }}/>
+            }
+            <b className='ml6'>{title}</b>
+          </span>
+          <div className={classNames.todoCardHeaderExtra}>{headerExtra}</div>
+        </View>
       }
-      
+      {
+        subHeader &&
+        <View>
+          {subHeader}
+        </View>
+      }
       <View className={classNames.todoCardBody}>
-        <View className={classNames.todoCardContent} onClick={onCardClick}>
+        <View className={classNames.todoCardContent} onClick={(e:any) => {
+          e.stopPropagation();
+          onCardClick && onCardClick(e)
+        }}>
           <Fields
             rows={rows}
             data={data}

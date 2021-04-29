@@ -96,7 +96,8 @@
     padding: 12PX 12PX 0;
   }
   .todoCardBody {
-    padding: 12PX;
+    margin-top: 12PX;
+    padding:0 12PX 12PX;
     .todoCardContent {
       padding:8PX 12PX;
       border-radius: 6PX;

@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { View,Text } from '@tarojs/components';
-import { maintenanceFormItem } from '../constants';
+import { MaintenanceFormItem, maintenanceFormItem } from '../constants';
 import { AtList, AtListItem } from 'taro-ui';
 import { useDispatch, useSelector } from 'react-redux';
 import { RematchDispatch, Models } from '@rematch/core';
 import { RootState } from '../../../store';
+import { AtListItemProps } from 'taro-ui/types/list';
 
 interface IMaintenanceProps {
   identify: string;
@@ -24,34 +25,45 @@ const Maintenance:React.FC<IMaintenanceProps> = ({
 }) => {
   const { common } = useDispatch<RematchDispatch<Models>>();
   const { accidentType, repairType, repairWay,maintenancePlace } = useSelector((state: RootState) => state.common);
-
+  const [ maintenanceFormItems, setMaintenanceFormItems ] = React.useState<MaintenanceFormItem[]>([])
   React.useEffect(() => {
     common.fetchDicForRepair()
   },[]);
+  React.useEffect(() => {
+    setMaintenanceFormItems(maintenanceFormItem({
+      role,
+      pickerData:{
+        accidentType, 
+        repairType, 
+        repairWay,
+        maintenancePlace
+      }
+    })[identify])
+  }, [identify, JSON.stringify(maintenanceFormItems)]);
   return (
     <View className='mt12'>
       <AtList>
         {
-          maintenanceFormItem({
-            role,
-            pickerData:{
-              accidentType, 
-              repairType, 
-              repairWay,
-              maintenancePlace
-            }
-          })[identify].map(item => {
+          maintenanceFormItems.length ? maintenanceFormItems.map(item => {
             const {
               isText = false, 
               component:Component,
               title,
               name,
               props,
-              children
+              children,
+              textRender,
+              onItemClick
             } = item;
             return (
               (isText || detail) ?
-              <AtListItem key={name} title={title} extraText={String(formValue[name] || '暂无')}></AtListItem> : 
+              <AtListItem 
+                key={name} 
+                title={title} 
+                extraText={textRender ? textRender(formValue[name], formValue) : String(formValue[name] || '-')} 
+                {...(props as AtListItemProps)}
+                onClick={() => onItemClick && onItemClick(formValue[name], formValue)}
+              ></AtListItem> : 
               Component && 
                 //@ts-ignore
                 <Component 
@@ -78,12 +90,12 @@ const Maintenance:React.FC<IMaintenanceProps> = ({
                   { //@ts-ignore 
                     children?.component && React.cloneElement(<children.component/>, {
                       ...children?.props,
-                      extraText:String(formValue[name]) || '请选择'
+                      extraText:String(formValue[name] || '请选择')
                     }) 
                   }
                 </Component>  
             )
-          })
+          }):null
         }
       </AtList>
     </View>

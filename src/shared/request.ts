@@ -64,6 +64,13 @@ function parseData(response: ResponseData, options?:ApiOptions): any{
     if(!response.hasOwnProperty('data')) {
       return response
     } else {
+      if(response.code === 1) {
+        return Taro.showToast({
+          title: response.msg as string,
+          icon: 'none',
+          mask: true
+        })
+      }
       return options?.onlyData ? response.data : response
     }
   }

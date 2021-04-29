@@ -1,6 +1,6 @@
 import { ModelEffects, ModelReducers } from '@rematch/core';
 import { RootState } from '../index';
-import { uploadFile, queryMaterial, queryDicForRepair } from '../../api/common';
+import { uploadFile, queryMaterial, queryDicForRepair, queryFileList } from '../../api/common';
 import * as Taro from '@tarojs/taro';
 
 /* interface User {
@@ -20,6 +20,7 @@ export type Common = {
   repairWay: any[];
   repairType: any[];
   maintenancePlace: any[];
+  fileList: any[]
 }
 
 const state:Common = {
@@ -28,7 +29,8 @@ const state:Common = {
   accidentType: [],
   repairType: [],
   repairWay: [],
-  maintenancePlace: []
+  maintenancePlace: [],
+  fileList: []
 }
 const reducers:ModelReducers<Common> = {
   save(state, payload) {
@@ -78,6 +80,16 @@ const effects:ModelEffects<RootState> = {
         this.save({
           material,
           filteredMaterial: material.slice(0, 20)
+        })
+      }
+    } catch(e) {} 
+  },
+  async fetchFileList(ids:string[]) {
+    try {
+      const response = await queryFileList(ids);
+      if(response) {
+        this.save({
+          fileList: response
         })
       }
     } catch(e) {} 

@@ -91,11 +91,11 @@ export async function queryTodoDetail<T>(data:TodoDetailParams | number, type?:s
     'ReportForms': `energy-consumption/${data}`,
 
     //维修相关
-    'TemporaryMaintenance': `temporary-repair-bill/${data}`,
-    'StopMaintenance': `stopping-maintenance-bill/${data}`,
-    'FactoryMaintenance': `shop-repair-bill/${data}`,
-    'OfficeMaintenance':`official-maintenance-bill/${data}`,
-    'YearMaintenance': `year-overhaul-plan-bill/${data}`
+    'TemporaryMaintenance': `temporary-repair-bill/not-url/${data}`,
+    'StopMaintenance': `stopping-maintenance-bill/not-url/${data}`,
+    'FactoryMaintenance': `shop-repair-bill/not-url/${data}`,
+    'OfficeMaintenance':`official-maintenance-bill/not-url/${data}`,
+    'YearMaintenance': `year-overhaul-plan-bill/not-url/${data}`
   }
   return request<T>({
     url: `/biz/${serviceMap[type!]}`,

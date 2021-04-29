@@ -34,9 +34,10 @@ const reducers:ModelReducers<Review> = {
   },
   put(state, payload) {
     const { records } = state;
-    const { index, data } = payload;
-    records.splice(index, 1, data);
-    return Object.assign({}, state, { records })
+    const { index=-1, data, task={} } = payload;
+    index > -1 && records.splice(index, 1, data);
+    console.log(Object.assign({}, state, { records,task:{ ...state.task, ...task } }))
+    return Object.assign({}, state, { records,task:{ ...state.task, ...task } })
   }
 }
 const effects = (dispatch:RematchDispatch<Models>):ModelEffects<RootState> => ({

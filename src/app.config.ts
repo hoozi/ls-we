@@ -37,6 +37,12 @@ export default {
         'index',
         'Detail'
       ]
+    },
+    {
+      root: 'page/FileList',
+      pages: [
+        'index'
+      ]
     }
   ],
   window: {

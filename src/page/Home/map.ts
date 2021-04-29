@@ -8,7 +8,7 @@ export default [
       color: color.brandColor,
       size: 24
     },
-    value: '物资审批',
+    value: '流程审批',
     url: '/page/Review/index'
   },
   {

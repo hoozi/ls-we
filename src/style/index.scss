@@ -6,6 +6,9 @@ $space:0,2,4,6,8,12,16,24,32,48,64,72,76;
 
 @for $i from 1 through length($space) {
   $item: nth($space, $i);
+  .m#{$item} {
+    margin: $item+0PX !important;
+  }
   .mt#{$item} {
     margin-top: $item+0PX !important;
   }
@@ -397,4 +400,8 @@ $space:0,2,4,6,8,12,16,24,32,48,64,72,76;
     padding-right: 0;
     white-space: normal;
   }
+}
+
+.warning-text {
+  color: #fa8c16;
 }

@@ -34,4 +34,13 @@ export async function queryDicForRepair<T>(type:string) {
   })
 }
 
+export async function queryFileList(ids: string[]) {
+  return request<any[]>({
+    url: `/admin/file/list `,
+    method: 'POST',
+    data: ids,
+    onlyData: true,
+    loadingText: '查询中'
+  })
+}
 

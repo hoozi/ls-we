@@ -1,17 +1,20 @@
 import * as React from 'react';
+import * as Taro from '@tarojs/taro-h5';
 import { Picker } from '@tarojs/components'
-import { AtInput,AtTextarea,AtListItem } from 'taro-ui';
+import { AtInput,AtTextarea,AtListItem,AtBadge } from 'taro-ui';
 import { AtTextareaProps } from 'taro-ui/types/textarea';
 import { PickerSelectorProps, PickerDateProps } from '@tarojs/components/types/Picker';
 import { AtInputProps } from 'taro-ui/types/input';
+import { AtListItemProps } from 'taro-ui/types/list';
 
 type Props = 
   Partial<AtInputProps> |
   Partial<AtTextareaProps> |
   Partial<PickerSelectorProps> |
-  Partial<PickerDateProps>
+  Partial<PickerDateProps> |
+  Partial<AtListItemProps>
 
-type ComponentType = typeof AtInput | typeof AtTextarea | typeof Picker | React.ComponentType<Props>;
+type ComponentType = typeof AtInput | typeof AtTextarea | typeof Picker | React.ComponentType<Props> | typeof AtListItem;
 
 export interface MaintenanceFormItem {
   children?: {
@@ -23,6 +26,8 @@ export interface MaintenanceFormItem {
   component?: ComponentType;
   isText?:boolean;
   props?: Props;
+  textRender?(v, data:any):any;
+  onItemClick?(v, data:any):void;
 }
 
 export const maintenanceFormItem = ({
@@ -78,6 +83,20 @@ export const maintenanceFormItem = ({
         title: '维修事项标题',
         name: 'title',
         isText: true
+      },
+      {
+        title: '附件',
+        name: 'attachmentUrl',
+        isText: true,
+        props: {
+          arrow: 'right'
+        } as AtListItemProps,
+        textRender:(v, d) => '查看',
+        onItemClick: (v,d) => (
+          Taro.navigateTo({
+            url: `/page/FileList/index?ids=${(Array.isArray(v) && v.length) ? v.join(',') : ''}`
+          })
+        )
       },
       {
         title: '设备损坏、故障及现象',

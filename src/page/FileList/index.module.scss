@@ -1,0 +1,14 @@
+.fileContainer {
+  border-bottom: 1px solid #f0f0f0;
+  background-color: #fff;
+  a {
+    display: flex;
+    padding: 12PX;
+    .fileName {
+      color: rgba(0,0,0,0.85)
+    }
+    .extra {
+      color: rgba(0,0,0,0.65)
+    }
+  }
+}

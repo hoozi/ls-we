@@ -64,7 +64,7 @@ const buttons:ButtonItem[] = [
 
 export const tabList:TabItem[] = [
   {
-    title: '物资领用',
+    title: '流程审批',
     value: 'MaterialsApproval'
   },
   {
