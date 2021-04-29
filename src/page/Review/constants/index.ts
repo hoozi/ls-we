@@ -91,11 +91,11 @@ export const maintenanceFormItem = ({
         props: {
           arrow: 'right'
         } as AtListItemProps,
-        textRender:(v, d) => '查看',
+        textRender:(v, d) => v.length ? '查看' : '暂无',
         onItemClick: (v,d) => (
-          Taro.navigateTo({
+          v.length ? Taro.navigateTo({
             url: `/page/FileList/index?ids=${(Array.isArray(v) && v.length) ? v.join(',') : ''}`
-          })
+          }) : null
         )
       },
       {
@@ -206,6 +206,20 @@ export const maintenanceFormItem = ({
         isText: true
       },
       {
+        title: '附件',
+        name: 'attachmentUrl',
+        isText: true,
+        props: {
+          arrow: 'right'
+        } as AtListItemProps,
+        textRender:(v, d) => v.length ? '查看' : '暂无',
+        onItemClick: (v,d) => (
+          v.length ? Taro.navigateTo({
+            url: `/page/FileList/index?ids=${(Array.isArray(v) && v.length) ? v.join(',') : ''}`
+          }) : null
+        )
+      },
+      {
         title: '预计开始时间',
         name: 'planStartTime',
         component: Picker,
@@ -303,6 +317,20 @@ export const maintenanceFormItem = ({
         title: '维修事项标题',
         name: 'title',
         isText: true
+      },
+      {
+        title: '附件',
+        name: 'attachmentUrl',
+        isText: true,
+        props: {
+          arrow: 'right'
+        } as AtListItemProps,
+        textRender:(v, d) => v.length ? '查看' : '暂无',
+        onItemClick: (v,d) => (
+          v.length ? Taro.navigateTo({
+            url: `/page/FileList/index?ids=${(Array.isArray(v) && v.length) ? v.join(',') : ''}`
+          }) : null
+        )
       },
       {
         title: '预计开始时间',
@@ -403,6 +431,20 @@ export const maintenanceFormItem = ({
         name: 'title',
         isText: true
       },
+      {
+        title: '附件',
+        name: 'attachmentUrl',
+        isText: true,
+        props: {
+          arrow: 'right'
+        } as AtListItemProps,
+        textRender:(v, d) => v.length ? '查看' : '暂无',
+        onItemClick: (v,d) => (
+          v.length ? Taro.navigateTo({
+            url: `/page/FileList/index?ids=${(Array.isArray(v) && v.length) ? v.join(',') : ''}`
+          }) : null
+        )
+      },
       ...basicItems
     ],
     YearMaintenance: [
@@ -415,6 +457,20 @@ export const maintenanceFormItem = ({
         title: '维修事项标题',
         name: 'title',
         isText: true
+      },
+      {
+        title: '附件',
+        name: 'attachmentUrl',
+        isText: true,
+        props: {
+          arrow: 'right'
+        } as AtListItemProps,
+        textRender:(v, d) => v.length ? '查看' : '暂无',
+        onItemClick: (v,d) => (
+          v.length ? Taro.navigateTo({
+            url: `/page/FileList/index?ids=${(Array.isArray(v) && v.length) ? v.join(',') : ''}`
+          }) : null
+        )
       },
       {
         title: '维修时长',
