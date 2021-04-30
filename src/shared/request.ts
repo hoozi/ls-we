@@ -123,18 +123,18 @@ export default function request<T>(options: Options): Promise<T> {
         }
         return parseData(response.data, options);
       }
-      const errortext:string = codeMessage[response.statusCode??999];
-      (response.statusCode !== 401 && response.statusCode !==500)  && 
-      Taro.showToast({
-        title: errortext,
-        icon: 'none',
-        mask: true
-      });
       throw response;
     })
     .catch(async (e) => {
       Taro.hideLoading();
       const data = await e.json();
+      const errortext:string = codeMessage[e.status??999];
+      (e.statusCode !== 401 && e.statusCode !==500)  && 
+      Taro.showToast({
+        title: data.msg || errortext,
+        icon: 'none',
+        mask: true
+      });
       if(e.status === 500) {
         return TaroH5.showToast({
           title: data.msg || '服务器错误',

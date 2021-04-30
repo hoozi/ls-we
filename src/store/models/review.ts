@@ -109,6 +109,7 @@ const effects = (dispatch:RematchDispatch<Models>):ModelEffects<RootState> => ({
     });
     try {
       const task = page === 'history' ? {id} : await queryTask<any>(id);
+      
       if(task) {
         const params = type === 'ReportForms' || type === 'Maintenance' ? task.id : { ids: task.id }
         this.save({

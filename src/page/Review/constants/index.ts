@@ -91,9 +91,9 @@ export const maintenanceFormItem = ({
         props: {
           arrow: 'right'
         } as AtListItemProps,
-        textRender:(v, d) => v.length ? '查看' : '暂无',
+        textRender:(v, d) => (Array.isArray(v) && v.length) ? `查看(${v.length})` : '暂无',
         onItemClick: (v,d) => (
-          v.length ? Taro.navigateTo({
+          (Array.isArray(v) && v.length) ? Taro.navigateTo({
             url: `/page/FileList/index?ids=${(Array.isArray(v) && v.length) ? v.join(',') : ''}`
           }) : null
         )
@@ -212,9 +212,9 @@ export const maintenanceFormItem = ({
         props: {
           arrow: 'right'
         } as AtListItemProps,
-        textRender:(v, d) => v.length ? '查看' : '暂无',
+        textRender:(v, d) => (Array.isArray(v) && v.length) ? `查看(${v.length})` : '暂无',
         onItemClick: (v,d) => (
-          v.length ? Taro.navigateTo({
+          (Array.isArray(v) && v.length) ? Taro.navigateTo({
             url: `/page/FileList/index?ids=${(Array.isArray(v) && v.length) ? v.join(',') : ''}`
           }) : null
         )
@@ -325,9 +325,9 @@ export const maintenanceFormItem = ({
         props: {
           arrow: 'right'
         } as AtListItemProps,
-        textRender:(v, d) => v.length ? '查看' : '暂无',
+        textRender:(v, d) => (Array.isArray(v) && v.length) ? `查看(${v.length})` : '暂无',
         onItemClick: (v,d) => (
-          v.length ? Taro.navigateTo({
+          (Array.isArray(v) && v.length) ? Taro.navigateTo({
             url: `/page/FileList/index?ids=${(Array.isArray(v) && v.length) ? v.join(',') : ''}`
           }) : null
         )
@@ -438,9 +438,9 @@ export const maintenanceFormItem = ({
         props: {
           arrow: 'right'
         } as AtListItemProps,
-        textRender:(v, d) => v.length ? '查看' : '暂无',
+        textRender:(v, d) => (Array.isArray(v) && v.length) ? `查看(${v.length})` : '暂无',
         onItemClick: (v,d) => (
-          v.length ? Taro.navigateTo({
+          (Array.isArray(v) && v.length) ? Taro.navigateTo({
             url: `/page/FileList/index?ids=${(Array.isArray(v) && v.length) ? v.join(',') : ''}`
           }) : null
         )
@@ -465,9 +465,9 @@ export const maintenanceFormItem = ({
         props: {
           arrow: 'right'
         } as AtListItemProps,
-        textRender:(v, d) => v.length ? '查看' : '暂无',
+        textRender:(v, d) => (Array.isArray(v) && v.length) ? `查看(${v.length})` : '暂无',
         onItemClick: (v,d) => (
-          v.length ? Taro.navigateTo({
+          (Array.isArray(v) && v.length) ? Taro.navigateTo({
             url: `/page/FileList/index?ids=${(Array.isArray(v) && v.length) ? v.join(',') : ''}`
           }) : null
         )

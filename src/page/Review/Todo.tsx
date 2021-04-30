@@ -66,17 +66,17 @@ const Todo:React.FC<{tid: string}> = props => {
     {
       title: '船长/部门长审批数量',
       dataIndex: 'captainAuditCount',
-      hide: task?.identify !== 'MaterialsApproval' && task?.identify !== 'OfficeMaterialsApproval'
+      hide: task?.identify !== 'MaterialsApproval' && task?.identify !== 'MaterialsAndOfficeMaterialsApproval' && task?.identify !== 'OfficeMaterialsApproval'
     },
     {
       title: '机务员/办公室主任审批数量',
       dataIndex: 'flightAuditCount',
-      hide: task?.identify !== 'MaterialsApproval' && task?.identify !== 'OfficeMaterialsApproval'
+      hide: task?.identify !== 'MaterialsApproval' && task?.identify !== 'MaterialsAndOfficeMaterialsApproval' && task?.identify !== 'OfficeMaterialsApproval'
     },
     {
       title: '机务员预估金额',
       dataIndex: 'budgetAmount',
-      hide: (value, data) => task?.taskName.indexOf('物资审批 - 机务员、班组所属部门长审批') > -1 && data.type !== '进口物资'
+      hide: (value, data) => task?.taskName?.indexOf('物资审批 - 机务员、班组所属部门长审批') > -1 && data.type !== '进口物资'
     }
   ]
 
@@ -162,9 +162,9 @@ const Todo:React.FC<{tid: string}> = props => {
     }
   }, [review]);
   const getAction = React.useCallback((item,index) => {
-    const taskName = task?.taskName || '';
-    if(!taskName) return;
-    if(task?.identify !== 'MaterialsApproval' && task?.identify !== 'OfficeMaterialsApproval') return;
+      const taskName = task?.taskName || '';
+      if(!taskName) return;
+      if(task?.identify !== 'MaterialsApproval' && task?.identify !== 'MaterialsAndOfficeMaterialsApproval' && task?.identify !== 'OfficeMaterialsApproval') return;
       switch(true) {
         case taskName.indexOf('物资审批 - 物资部总管审批') > -1 && item.outWarehouseStatus === '未出库':
           currentId.current = item.id;
@@ -233,7 +233,7 @@ const Todo:React.FC<{tid: string}> = props => {
                 records.map((item, index) => {
                   const taskName = task?.taskName;
                   //let _item = item;
-                  if(task?.identify === 'MaterialsApproval' || task?.identify === 'OfficeMaterialsApproval') {
+                  if(task?.identify === 'MaterialsApproval' || task?.identify === 'MaterialsAndOfficeMaterialsApproval' || task?.identify === 'OfficeMaterialsApproval') {
                     switch(true) {
                       case taskName.indexOf('物资审批 - 机务员、班组所属部门长审批') > -1:
                         //_item = {...item, flightAuditCount: item.flightAuditCount || item.captainAuditCount}

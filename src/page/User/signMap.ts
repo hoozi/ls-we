@@ -18,7 +18,7 @@ export const signInList:SignItem[] = [
     name: 'username',
     title: '账号',
     props: {
-      placeholder: '请输入',
+      placeholder: '请输入工号/手机号',
       placeholderStyle: 'color:#999'
     },
     options: {
@@ -26,7 +26,7 @@ export const signInList:SignItem[] = [
       rules: [
         {
           required: true,
-          message: '请输入账号',
+          message: '请输入工号/手机号',
           validateTrigger: 'onInput'
         }
       ]
@@ -36,7 +36,7 @@ export const signInList:SignItem[] = [
     name: 'password',
     title: '密码',
     props: {
-      placeholder: '请输入',
+      placeholder: '请输入密码',
       placeholderStyle: 'color:#999'
     },
     options: {

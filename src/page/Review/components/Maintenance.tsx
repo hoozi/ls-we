@@ -61,8 +61,8 @@ const Maintenance:React.FC<IMaintenanceProps> = ({
                 key={name} 
                 title={title} 
                 extraText={textRender ? textRender(formValue[name], formValue) : String(formValue[name] || '-')} 
-                {...(props as AtListItemProps)}
                 onClick={() => onItemClick && onItemClick(formValue[name], formValue)}
+                {...(props as AtListItemProps)}
               ></AtListItem> : 
               Component && 
                 //@ts-ignore
