@@ -112,15 +112,8 @@ export default function request<T>(options: Options): Promise<T> {
   return Taro.request(newOptions)
     .then(response => {
       Taro.hideLoading();
+      
       if (response.statusCode >= 200 && response.statusCode < 300) {
-        const { data:{code, data} } = response
-        if(code === 1) {
-          return TaroH5.showToast({
-            title: data.msg || '服务器错误',
-            icon: 'none',
-            mask: true
-          });
-        }
         return parseData(response.data, options);
       }
       throw response;
