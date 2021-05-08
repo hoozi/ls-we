@@ -38,3 +38,14 @@ export function encryption<T=SignInParams>(params:EncryptionParams):T {
   });
   return result
 }
+
+/**
+ * CryptoJS加密
+ */
+ export function encrypt(word:any, keyStr?:string):string {
+  keyStr = keyStr ? keyStr : 'weihuangweihuang'
+  const key = CryptoJS.enc.Utf8.parse(keyStr)
+  const srcs = CryptoJS.enc.Utf8.parse(word)
+  const encrypted = CryptoJS.AES.encrypt(srcs, key, { mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.Pkcs7 })
+  return encrypted.toString()
+}

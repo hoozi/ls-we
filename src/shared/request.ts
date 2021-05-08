@@ -2,6 +2,7 @@ import Taro,{ RequestParams } from '@tarojs/taro';
 import * as TaroH5 from '@tarojs/taro-h5'
 import { getToken, removeToken } from './token';
 import { service_url } from '../constants';
+import { encrypt } from './utils';
 
 interface CodeMessage {
   [code: string]: string;
@@ -106,7 +107,8 @@ export default function request<T>(options: Options): Promise<T> {
   }
   newOptions.header = {
     ...newOptions.header,
-    Authorization: getToken() ? `Bearer ${getToken()}` : 'Basic d2VpaHVhbmc6d2VpaHVhbmc='
+    Authorization: getToken() ? `Bearer ${getToken()}` : 'Basic d2VpaHVhbmc6d2VpaHVhbmc=',
+    SIGN: encrypt(Date.now())
   }
   newOptions.url = `${service_url}${newOptions.url}`;
   return Taro.request(newOptions)
