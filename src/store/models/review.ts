@@ -36,8 +36,7 @@ const reducers:ModelReducers<Review> = {
     const { records } = state;
     const { index=-1, data, task={} } = payload;
     index > -1 && records.splice(index, 1, data);
-    console.log(Object.assign({}, state, { records,task:{ ...state.task, ...task } }))
-    return Object.assign({}, state, { records,task:{ ...state.task, ...task } })
+    return Object.assign({}, state, { records: [...records],task:{ ...state.task, ...task } })
   }
 }
 const effects = (dispatch:RematchDispatch<Models>):ModelEffects<RootState> => ({
@@ -153,7 +152,6 @@ const effects = (dispatch:RematchDispatch<Models>):ModelEffects<RootState> => ({
   async deleteTodo(payload) {
     try {
       const effect = this;
-      console.log(effect)
       const { pid, type, id } = payload
       const response = await deleteTodo<any>(id);
       if(response.code === 0) {
@@ -178,7 +176,6 @@ const effects = (dispatch:RematchDispatch<Models>):ModelEffects<RootState> => ({
     const { callback, ...restPayload } = payload;
     try {
       const response = await queryCountInWarehouse<any[]>(restPayload.id);
-      console.log(response)
       callback && callback(response.reduce((sum, cur) => sum+cur.quantity,0))
     } catch(e) {
       callback && callback(0)

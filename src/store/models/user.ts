@@ -75,7 +75,7 @@ const effects:ModelEffects<RootState> = {
   async updatePassword(payload) {
     try {
       const response = await updatePassword<any>({
-        username: Taro.getStorageSync('uname'),
+        username: Taro.getStorageSync('sysUser').username,
         ...payload
       });
       if(response.code === 0) {
@@ -84,8 +84,9 @@ const effects:ModelEffects<RootState> = {
           icon: 'success',
           mask: true,
           duration: 2000,
-          success() {
+          success:() => {
             setTimeout(() => {
+              console.log(this)
               this.logout();
             }, 2000)
           }

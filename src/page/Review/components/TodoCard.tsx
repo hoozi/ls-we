@@ -33,7 +33,7 @@ const TodoCard:React.FC<ITodoCard> = ({
       { 
         ( title || headerExtra ) &&
         <View className={classNames.todoCardHeader}>
-          <span>
+          <span className={classNames.todoCardTitle}>
             {
               checkable &&
               <Checkbox value={data.id} checked={checked} onClick={e => {

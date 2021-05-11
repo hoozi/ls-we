@@ -94,6 +94,17 @@
     justify-content: space-between;
     align-items: center;
     padding: 12PX 12PX 0;
+    .todoCardTitle{
+      display: flex;
+      align-items: center;
+      line-height: 1;
+      .todoCardCheckbox {
+        .taro-checkbox_checked {
+          top: 0;
+        }
+      }
+      
+    }
   }
   .todoCardBody {
     margin-top: 12PX;

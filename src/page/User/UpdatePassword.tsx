@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as Taro from '@tarojs/taro';
+import * as Taro from '@tarojs/taro-h5';
 import { View, Text } from '@tarojs/components';
 import { useDispatch } from 'react-redux';
 import { RematchDispatch, Models } from '@rematch/core';
@@ -42,10 +42,18 @@ const UpdatePassword:React.FC<any> = props => {
         icon: 'none'
       })
     }
+    if(!/^(?=.*?[a-zA-Z])(?=.*?[0-9])[a-zA-Z0-9]{6,}/.test(passwordValues.current.newpassword1)) {
+      return Taro.showToast({
+        title: '密码由数字、字母组成，六位以上',
+        icon: 'none'
+      });
+    }
+
     user.updatePassword(passwordValues.current);
   },[passwordValues]);
   return (
     <TopBarPage title='修改密码'>
+      <View className='p6' style={{color: '#999'}}>密码由数字、字母组成，六位以上</View>
       <View className={classNames.upPasswordItem}>
         <Text style='width: 100px;display:block'>旧密码</Text>
         <Password 

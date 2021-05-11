@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as Taro from '@tarojs/taro-h5';
 import { parse } from 'qs';
-import { View, Text } from '@tarojs/components';
+import { View, Text, Checkbox } from '@tarojs/components';
 import { useDispatch, useSelector } from 'react-redux';
 import { RematchDispatch, Models } from '@rematch/core';
 import { AtButton, AtFloatLayout, AtTextarea, AtActionSheet, AtActionSheetItem } from 'taro-ui';
@@ -30,6 +30,7 @@ const Todo:React.FC<{tid: string}> = props => {
   const { review } = useDispatch<RematchDispatch<Models>>();
   const { task, records } = useSelector((state: RootState) => state.review);
   const currentRow = React.useRef<any>([]);
+  const allRows = records.filter(item => item.outWarehouseStatus === '未出库' && ( item.flightAuditCount|| item.captainAuditCount || item.quantity || 0 ) <= item.inWarehouseQuantity);
   const todoRows = [
     {
       title: '物资名称',
@@ -72,11 +73,6 @@ const Todo:React.FC<{tid: string}> = props => {
       title: '机务员/办公室主任审批数量',
       dataIndex: 'flightAuditCount',
       hide: task?.identify !== 'MaterialsApproval' && task?.identify !== 'MaterialsAndOfficeMaterialsApproval' && task?.identify !== 'OfficeMaterialsApproval'
-    },
-    {
-      title: '机务员预估金额',
-      dataIndex: 'budgetAmount',
-      hide: (value, data) => task?.taskName?.indexOf('物资审批 - 机务员、班组所属部门长审批') > -1 && data.type !== '进口物资'
     }
   ]
 
@@ -106,7 +102,7 @@ const Todo:React.FC<{tid: string}> = props => {
     setVisible(!!flag);
   }, []);
   const handleUpdateTask = () => {
-    const changeValue = window.prompt('机务员预估总金额', records.filter(item => item.type === '进口物资').reduce((sum, cur) => sum+cur.budgetAmount, 0));
+    const changeValue = window.prompt('机务员预估总金额', task?.budgetAmount || 0);
     if(changeValue) {
       review.put({
         task: {
@@ -136,17 +132,17 @@ const Todo:React.FC<{tid: string}> = props => {
       {
         placeholder: '机务员/办公室主任审批数量',
         field: 'flightAuditCount',
-        default: data.captainAuditCount
+        default: data.flightAuditCount || data.captainAuditCount
       },
       {
         placeholder: '请输入船长/部门长审批数量',
         field: 'captainAuditCount',
-        default: data.quantity
+        default: data.captainAuditCount || data.quantity
       },
       {
         placeholder: '机务员/办公室主任审批数量',
         field: 'flightAuditCount',
-        default: data.captainAuditCount
+        default: data.flightAuditCount || data.captainAuditCount
       }
     ];
     const current = map[type];
@@ -169,11 +165,11 @@ const Todo:React.FC<{tid: string}> = props => {
         case taskName.indexOf('物资审批 - 物资部总管审批') > -1 && item.outWarehouseStatus === '未出库':
           currentId.current = item.id;
           return setEditButtonOpened(true);
-        case taskName.indexOf('物资审批 - 机务员、班组所属部门长审批') > -1:
-          return handlePut(item, index, item.type === '进口物资' ? 3 : 0);
+        case taskName.indexOf('物资审批 - 机务员、班组所属部门长审批') > -1 && item.type !== '办公用品':
+          return handlePut(item, index, 0);
         case taskName.indexOf('物资审批 - 船长、班组长、部门长审批') > -1:
           return handlePut(item, index, 1);
-        case taskName.indexOf('办公室主任审批') > -1:
+        case taskName.indexOf('办公室主任审批') > -1 && item.type === '办公用品': 
           return handlePut(item, index, 2);
       }
     return null;
@@ -207,7 +203,7 @@ const Todo:React.FC<{tid: string}> = props => {
             ) && 
             <View className='p12' onClick={() => detail === '0' ? handleUpdateTask() : null}>
               <View className='warning-text'>
-                机务员预估总金额: ¥{records.filter(item => item.type === '进口物资').reduce((sum, cur) => sum+cur.budgetAmount, 0) || task?.budgetAmount || 0}
+                机务员预估总金额: ¥{task?.budgetAmount || 0}
                 {
                   detail === '0' &&
                   <Text className={`icon icon-bianji ml4`}/>
@@ -254,8 +250,13 @@ const Todo:React.FC<{tid: string}> = props => {
                       key={item.id || index}
                       title={item.receiveBillNo}
                       data={item}
-                      checked={currentRow.current.indexOf(item) > -1}
-                      checkable={task.taskName?.indexOf('物资审批 - 物资部总管审批') > -1 && item.outWarehouseStatus === '未出库' && detail === '0'}
+                      checked={rows.indexOf(item) > -1}
+                      checkable={
+                        task.taskName?.indexOf('物资审批 - 物资部总管审批') > -1 && 
+                        item.outWarehouseStatus === '未出库' && 
+                        detail === '0' &&
+                        ( item.flightAuditCount|| item.captainAuditCount || item.quantity || 0 ) <= item.inWarehouseQuantity
+                      }
                       rows={todoRows}
                       headerExtra={task.taskName?.indexOf('物资审批 - 物资部总管审批') > -1 ? <b style={{color:color.brandColor}}>{item.outWarehouseStatus}</b> : null}
                       onCardClick={() => {
@@ -267,7 +268,7 @@ const Todo:React.FC<{tid: string}> = props => {
                           const index = rows.indexOf(item);
                           if(index > -1) {
                             rows.splice(index, 1);
-                            return rows;
+                            return [...rows];
                           } else {
                             return [...rows, item];
                           }
@@ -284,7 +285,22 @@ const Todo:React.FC<{tid: string}> = props => {
       { 
         detail === '0' && 
         <BottomBar>
-          <View className='button-group'>
+          <View className={`button-group ${task.taskName?.indexOf('物资审批 - 物资部总管审批') > -1 ? 'button-group-between' : ''}`}>
+            {
+              task.taskName?.indexOf('物资审批 - 物资部总管审批') > -1 ?
+              <View className='extra-info'>
+                <Checkbox 
+                  value='all' 
+                  checked={allRows.length === rows.length}
+                  onClick={(e) => setRows(() => (e.target as HTMLInputElement).checked ? allRows : [])}
+                />
+                  <div className='ml6' style={{lineHeight: 1}}>
+{/*                     <div className='mb4'>全选</div> */}
+                    <div >已选择<b style={{color:color.brandColor}}> {rows.length} </b>条</div>
+                  </div>
+              </View> :
+              null
+            }
             <AtButton type='primary' className={classNames.round} onClick={() => setOpened(true)}>操 作</AtButton>
           </View>
         </BottomBar> 

@@ -48,6 +48,12 @@ $space:0,2,4,6,8,12,16,24,32,48,64,72,76;
   min-height: 300PX;
   height: 300PX;
 }
+.weui-cells_checkbox {
+  height: 23PX;
+}
+.taro-checkbox_checked {
+  top: 0 !important;
+}
 
 .at-search-bar {
   padding: 12PX;
@@ -130,6 +136,18 @@ $space:0,2,4,6,8,12,16,24,32,48,64,72,76;
 
 .button-group {
   display: flex;
+  align-items: center;
+  &.button-group-between {
+    justify-content: space-between;
+    .at-button {
+      width: 100PX;
+    }
+  }
+  .extra-info {
+    flex: 1;
+    display: flex;
+    align-items: center;
+  }
   .at-button {
     flex:1;
     border-radius: 100PX;
