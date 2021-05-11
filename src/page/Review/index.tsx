@@ -111,6 +111,12 @@ const Review:React.FC<any> = props => {
     )) : null
   );
   const handleTabChange = React.useCallback(index => {
+    if(index === 2) {
+      return Taro.showToast({
+        title: '请在电脑端操作',
+        icon: 'none'
+      });
+    }
     setTabCurrent(index);
     props.setParams({
       search: {
