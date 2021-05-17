@@ -23,6 +23,7 @@ export interface MaintenanceFormItem {
   };
   title: string;
   name: string;
+  required?:boolean;
   component?: ComponentType;
   isText?:boolean;
   props?: Props;
@@ -362,7 +363,10 @@ export const maintenanceFormItem = ({
         title: '实际开始时间',
         name: 'actualStartTime',
         component: Picker,
-        isText: role.indexOf('机务员审批') < 0,
+        required: role.indexOf('机务员三审') > -1,
+        isText: role.indexOf('机务员审批') < 0 && 
+        role.indexOf('机务员二审') < 0 &&
+        role.indexOf('机务员三审') < 0,
         children: {
           component: AtListItem,
           props: {
@@ -378,7 +382,10 @@ export const maintenanceFormItem = ({
         title: '实际结束时间',
         name: 'actualEndTime',
         component: Picker,
-        isText: role.indexOf('机务员审批') < 0,
+        required: role.indexOf('机务员三审') > -1,
+        isText: role.indexOf('机务员审批') < 0 && 
+        role.indexOf('机务员二审') < 0 &&
+        role.indexOf('机务员三审') < 0,
         children: {
           component: AtListItem,
           props: {
@@ -393,7 +400,10 @@ export const maintenanceFormItem = ({
       {
         title: '维修金额',
         name: 'repairFee',
-        isText: role.indexOf('机务员审批') < 0,
+        required: role.indexOf('机务员三审') > -1,
+        isText: role.indexOf('机务员审批') < 0 && 
+        role.indexOf('机务员二审') < 0 &&
+        role.indexOf('机务员三审') < 0,
         component: AtInput,
         props: {
           type: 'number',
@@ -401,14 +411,30 @@ export const maintenanceFormItem = ({
         }
       },
       {
-        title: '保养地点',
+        title: '维修天数',
+        name: 'repairDay',
+        required: role.indexOf('机务员三审') > -1,
+        isText: role.indexOf('机务员审批') < 0 && 
+        role.indexOf('机务员二审') < 0 &&
+        role.indexOf('机务员三审') < 0,
+        component: AtInput,
+        props: {
+          type: 'number',
+          placeholder: '请输入'
+        }
+      },
+      {
+        title: '维修船厂',
         name: 'maintenancePlace',
+        required: role.indexOf('机务员三审') > -1,
         component: Picker,
-        isText: role.indexOf('机务员审批') < 0,
+        isText: role.indexOf('机务员审批') < 0 && 
+        role.indexOf('机务员二审') < 0 &&
+        role.indexOf('机务员三审') < 0,
         children: {
           component: AtListItem,
           props: {
-            title: '保养地点',
+            title: '维修船厂',
             arrow: 'right'
           }
         },

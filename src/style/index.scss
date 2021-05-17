@@ -162,6 +162,16 @@ $space:0,2,4,6,8,12,16,24,32,48,64,72,76;
   }
 }
 
+.list-required {
+  .item-content__info-title {
+    &:before {
+      content: '*';
+      color: #f5222d;
+      font-weight: 500;
+    }
+  }
+}
+
 .brand-text {
   color: $color-brand;
 }

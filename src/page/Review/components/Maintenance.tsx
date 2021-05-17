@@ -60,6 +60,7 @@ const Maintenance:React.FC<IMaintenanceProps> = ({
               <AtListItem 
                 key={name} 
                 title={title} 
+                className={item.required === true ? 'list-required' : ''}
                 extraText={textRender ? textRender(formValue[name], formValue) : String(formValue[name] || '-')} 
                 onClick={() => onItemClick && onItemClick(formValue[name], formValue)}
                 {...(props as AtListItemProps)}
@@ -71,6 +72,7 @@ const Maintenance:React.FC<IMaintenanceProps> = ({
                   title={title} 
                   name={name} 
                   key={name} 
+                  className={item.required === true ? 'list-required' : ''}
                   value={formValue[name]}
                   onChange={value => {
                     updater(prev => {

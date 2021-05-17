@@ -15,6 +15,37 @@ import TaskDetail from '../../component/TaskDetail';
 import { maintenanceValueForState } from './constants';
 import { color } from '../../constants';
 
+function copyComment(role:string, type): null | ((when:string)=>string | null) {
+  if(type !== 'Maintenance') return null;
+  const submitComments = [
+    {
+      role: '基层单位审批',
+      comment: 'grassrootsLeadershipOpinion',
+      when: '驳回'
+    },
+    {
+      role: '设备部副经理审批',
+      comment: 'deputyTechnologyLeadershipOpinion',
+      when: '驳回'
+    },
+    {
+      role: '设备部经理审批',
+      comment: 'technologyLeadershipOpinion',
+      when: '驳回'
+    },
+    {
+      role: '副总审批',
+      comment: 'vicePresidentLeadershipOpinion',
+      when: '驳回'
+    }
+  ];
+  const currentSubmitComment = submitComments.find(item => Boolean(~role.indexOf(item.role))) || null;
+  return (when: string) => {
+    if(currentSubmitComment && currentSubmitComment?.when === when) return currentSubmitComment.comment;
+    return null;
+  }
+}
+
 const Todo:React.FC<{tid: string}> = props => {
   const tid = props.tid;
   const { id, userId, deptName, type, detail='0', page='' } = parse(tid.split('?')[1]);
@@ -30,7 +61,8 @@ const Todo:React.FC<{tid: string}> = props => {
   const { review } = useDispatch<RematchDispatch<Models>>();
   const { task, records } = useSelector((state: RootState) => state.review);
   const currentRow = React.useRef<any>([]);
-  const allRows = records.filter(item => item.outWarehouseStatus === '未出库' && ( item.flightAuditCount|| item.captainAuditCount || item.quantity || 0 ) <= item.inWarehouseQuantity);
+  //<input type="file" accept="image/*" />
+  const allRows = Array.isArray(records) ? records.filter(item => item.outWarehouseStatus === '未出库' && ( item.flightAuditCount|| item.captainAuditCount || item.quantity || 0 ) <= item.inWarehouseQuantity) : [];
   const todoRows = [
     {
       title: '物资名称',
@@ -119,13 +151,20 @@ const Todo:React.FC<{tid: string}> = props => {
         mask: true
       })
     } 
-    review.submitTask({
+    const copyedComment = copyComment(task?.taskName, type);
+    //grassrootsLeadershipOpinion role.indexOf('基层单位审批') < 0
+    const finalComment = (
+      !copyedComment ? 
+        comment : 
+        maintenanceValue[task?.identify][copyedComment(taskAction.current) || ''] 
+    )
+    /* review.submitTask({
       ...task,
       extra: currentRow.current.length ? currentRow.current : (type === 'Maintenance' ? maintenanceValue[task?.identify] : records.map(item => ({...item}))),
       comment,
       isDefault: true,
       taskFlag: taskAction.current
-    });
+    }); */
   }, [task, records, comment, taskAction.current, maintenanceValue]);
   const handlePut = React.useCallback((data, index, type) => {
     const map = [
@@ -313,9 +352,12 @@ const Todo:React.FC<{tid: string}> = props => {
                   taskAction.current = item;
                   setOpened(false);
                   if(type === 'Maintenance') {
-                    handleSubmitTask();
+                    if(task.taskName?.indexOf('机务员审批') > -1 && item === '驳回') {
+                      return handleShowFloatLayout(true);
+                    }
+                    return handleSubmitTask();
                   } else {
-                    handleShowFloatLayout(true);
+                    return handleShowFloatLayout(true);
                   }
                 }}>{item}</AtActionSheetItem>
               )
