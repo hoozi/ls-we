@@ -68,7 +68,7 @@ const config = {
     router: {
       mode: 'hash'
     },
-    publicPath: '/',
+    publicPath: './',
     staticDirectory: 'static',
     postcss: {
       autoprefixer: {
