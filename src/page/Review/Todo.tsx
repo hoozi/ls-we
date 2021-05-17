@@ -158,13 +158,13 @@ const Todo:React.FC<{tid: string}> = props => {
         comment : 
         maintenanceValue[task?.identify][copyedComment(taskAction.current) || ''] 
     )
-    /* review.submitTask({
+    review.submitTask({
       ...task,
       extra: currentRow.current.length ? currentRow.current : (type === 'Maintenance' ? maintenanceValue[task?.identify] : records.map(item => ({...item}))),
-      comment,
+      comment:finalComment,
       isDefault: true,
       taskFlag: taskAction.current
-    }); */
+    });
   }, [task, records, comment, taskAction.current, maintenanceValue]);
   const handlePut = React.useCallback((data, index, type) => {
     const map = [
