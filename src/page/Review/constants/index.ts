@@ -100,6 +100,16 @@ export const maintenanceFormItem = ({
         )
       },
       {
+        title: '船舶工单',
+        name: 'validate',
+        isText: true,
+        props: {
+          arrow: 'right',
+          className: 'warning-item'
+        } as AtListItemProps,
+        textRender:(v, d) => '请在电脑端操作'
+      },
+      {
         title: '设备损坏、故障及现象',
         name: 'damageDescription',
         isText: role.indexOf('船长审批') < 0,
@@ -130,14 +140,15 @@ export const maintenanceFormItem = ({
         }
       },
       {
-        title: '维修方式',
+        title: '维修方向',
         name: 'repairWay',
         component: Picker,
-        isText: role.indexOf('机务员二审') < 0,
+        isText: role.indexOf('机务员二审') < 0 && 
+        role.indexOf('设备部副经理二审') < 0,
         children: {
           component: AtListItem,
           props: {
-            title: '维修方式',
+            title: '维修方向',
             arrow: 'right'
           }
         },
@@ -150,7 +161,11 @@ export const maintenanceFormItem = ({
       {
         title: '故障类别',
         name: 'accidentType',
-        isText: role.indexOf('船长审批') < 0,
+        required: role.indexOf('机务员三审') > -1,
+        isText: role.indexOf('船长审批') < 0 && 
+        role.indexOf('机务员审批') < 0 &&
+        role.indexOf('机务员二审') < 0 &&
+        role.indexOf('机务员三审') < 0,
         component: Picker,
         children: {
           component: AtListItem,
@@ -169,7 +184,10 @@ export const maintenanceFormItem = ({
         title: '维修类型',
         name: 'repairType',
         component: Picker,
-        isText: role.indexOf('机务员二审') < 0,
+        required: role.indexOf('机务员三审') > -1,
+        isText: role.indexOf('机务员二审') < 0 && 
+        role.indexOf('机务员审批') < 0 &&
+        role.indexOf('机务员三审') < 0,
         children: {
           component: AtListItem,
           props: {
@@ -186,14 +204,45 @@ export const maintenanceFormItem = ({
       {
         title: '维修金额',
         name: 'repairFee',
-        isText: role.indexOf('机务员二审') < 0,
+        required: role.indexOf('机务员三审') > -1,
+        isText: role.indexOf('机务员二审') < 0 && 
+        role.indexOf('机务员审批') < 0 &&
+        role.indexOf('机务员三审') < 0,
         component: AtInput,
         props: {
           type: 'number',
           placeholder: '请输入'
         }
       },
-      ...basicItems
+      {
+        title: '基层领导意见',
+        name: 'grassrootsLeadershipOpinion',
+        isText: role.indexOf('基层单位审批') < 0,
+        component: AtInput,
+        props: {
+          placeholder: '请输入'
+        }
+      },
+      {
+        title: '设备部意见',
+        name: 'technologyLeadershipOpinion',
+        isText: role.indexOf('设备部经理审批') < 0 && 
+        role.indexOf('机务员审批') < 0 &&
+        role.indexOf('设备部副经理审批') < 0,
+        component: AtInput,
+        props: {
+          placeholder: '请输入'
+        }
+      },
+      {
+        title: '技术副总意见',
+        name: 'vicePresidentLeadershipOpinion',
+        isText: role.indexOf('副总审批') < 0,
+        component: AtInput,
+        props: {
+          placeholder: '请输入'
+        }
+      }
     ],
     StopMaintenance: [
       {
@@ -219,6 +268,15 @@ export const maintenanceFormItem = ({
             url: `/page/FileList/index?ids=${(Array.isArray(v) && v.length) ? v.join(',') : ''}`
           }) : null
         )
+      },
+      {
+        title: '船舶工单',
+        name: 'validate',
+        isText: true,
+        props: {
+          arrow: 'right'
+        } as AtListItemProps,
+        textRender:(v, d) => '请在电脑端操作'
       },
       {
         title: '预计开始时间',
@@ -332,6 +390,15 @@ export const maintenanceFormItem = ({
             url: `/page/FileList/index?ids=${(Array.isArray(v) && v.length) ? v.join(',') : ''}`
           }) : null
         )
+      },
+      {
+        title: '船舶工单',
+        name: 'validate',
+        isText: true,
+        props: {
+          arrow: 'right'
+        } as AtListItemProps,
+        textRender:(v, d) => '请在电脑端操作'
       },
       {
         title: '预计开始时间',

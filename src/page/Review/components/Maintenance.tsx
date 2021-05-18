@@ -39,7 +39,14 @@ const Maintenance:React.FC<IMaintenanceProps> = ({
         maintenancePlace
       }
     })[identify])
-  }, [identify, JSON.stringify(maintenanceFormItems)]);
+  }, [
+    identify, 
+    JSON.stringify(maintenanceFormItems),
+    accidentType, 
+    repairType, 
+    repairWay,
+    maintenancePlace
+  ]);
   return (
     <View className='mt12'>
       <AtList>

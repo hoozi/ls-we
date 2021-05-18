@@ -171,6 +171,11 @@ $space:0,2,4,6,8,12,16,24,32,48,64,72,76;
     }
   }
 }
+.warning-item {
+  .item-extra__info {
+    color: #455fe4
+  }
+}
 
 .brand-text {
   color: $color-brand;

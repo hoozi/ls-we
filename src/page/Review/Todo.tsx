@@ -19,6 +19,7 @@ function copyComment(role:string, type): null | ((when:string)=>string | null) {
   if(type !== 'Maintenance') return null;
   const submitComments = [
     {
+      
       role: '基层单位审批',
       comment: 'grassrootsLeadershipOpinion',
       when: '驳回'
@@ -30,6 +31,11 @@ function copyComment(role:string, type): null | ((when:string)=>string | null) {
     },
     {
       role: '设备部经理审批',
+      comment: 'technologyLeadershipOpinion',
+      when: '驳回'
+    },
+    {
+      role: '机务员审批',
       comment: 'technologyLeadershipOpinion',
       when: '驳回'
     },
@@ -251,7 +257,7 @@ const Todo:React.FC<{tid: string}> = props => {
             </View>
           }
           {
-            Object.keys(task).length && 
+            Object.keys(task).length ?
             (
               type === 'ReportForms' ?
               <TaskDetail tid={props.tid}/> :
@@ -316,7 +322,7 @@ const Todo:React.FC<{tid: string}> = props => {
                     /> 
                   )
                 }) : null
-            )
+            ) : null
           }
           {/* <TaskDetail onEdit={(data, index) => type === 'PurchasingApproval' ? handlePut(data,index) : null} tid={props.tid}/> */}
         </View>
