@@ -99,7 +99,7 @@ export const maintenanceFormItem = ({
           }) : null
         )
       },
-      {
+      /* {
         title: '船舶工单',
         name: 'validate',
         isText: true,
@@ -108,7 +108,7 @@ export const maintenanceFormItem = ({
           className: 'warning-item'
         } as AtListItemProps,
         textRender:(v, d) => '请在电脑端操作'
-      },
+      }, */
       {
         title: '设备损坏、故障及现象',
         name: 'damageDescription',
@@ -269,7 +269,7 @@ export const maintenanceFormItem = ({
           }) : null
         )
       },
-      {
+      /* {
         title: '船舶工单',
         name: 'validate',
         isText: true,
@@ -277,7 +277,7 @@ export const maintenanceFormItem = ({
           arrow: 'right'
         } as AtListItemProps,
         textRender:(v, d) => '请在电脑端操作'
-      },
+      }, */
       {
         title: '预计开始时间',
         name: 'planStartTime',
@@ -391,7 +391,7 @@ export const maintenanceFormItem = ({
           }) : null
         )
       },
-      {
+      /* {
         title: '船舶工单',
         name: 'validate',
         isText: true,
@@ -399,7 +399,7 @@ export const maintenanceFormItem = ({
           arrow: 'right'
         } as AtListItemProps,
         textRender:(v, d) => '请在电脑端操作'
-      },
+      }, */
       {
         title: '预计开始时间',
         name: 'planStartTime',
@@ -601,7 +601,7 @@ export const maintenanceFormItem = ({
 
 const getMaintenanceValueFromItem = maintenanceFormItem({pickerData:{},role:''});
 
-const maintenanceValueForState = {};
+const maintenanceValueForState:any = {};
 
 for(let key in getMaintenanceValueFromItem) {
   maintenanceValueForState[key] = getMaintenanceValueFromItem[key].reduce((memo, cur) =>{ memo[cur.name] = '';return memo },{})

@@ -86,7 +86,7 @@ const effects = (dispatch:RematchDispatch<Models>):ModelEffects<RootState> => ({
   async submitTask(payload) {
     try {
       const response = await submitTask<any>(payload);
-      if(response.code === 0) {
+      if(response.code === 0 || (response.code === 1 && response.msg === 'Cannot complete a suspended task')) {
         Taro.showToast({
           title: '提交成功',
           icon: 'success',

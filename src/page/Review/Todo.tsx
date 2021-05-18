@@ -166,7 +166,7 @@ const Todo:React.FC<{tid: string}> = props => {
     )
     review.submitTask({
       ...task,
-      extra: currentRow.current.length ? currentRow.current : (type === 'Maintenance' ? maintenanceValue[task?.identify] : records.map(item => ({...item}))),
+      extra: currentRow.current.length ? currentRow.current : (type === 'Maintenance' ? {...maintenanceValue[task?.identify], validate: false} : records.map(item => ({...item}))),
       comment:finalComment,
       isDefault: true,
       taskFlag: taskAction.current
@@ -360,6 +360,19 @@ const Todo:React.FC<{tid: string}> = props => {
                   if(type === 'Maintenance') {
                     if(task.taskName?.indexOf('机务员审批') > -1 && item === '驳回') {
                       return handleShowFloatLayout(true);
+                    }
+                    if(task.taskName?.indexOf('船舶工单上传') > -1) {
+                      return Taro.showToast({
+                        title: '船舶工单请在电脑端操作',
+                        icon: 'none',
+                        mask: true,
+                        duration: 2000,
+                        success() {
+                          setTimeout(() => {
+                            handleSubmitTask();
+                          }, 2000)
+                        }
+                      });
                     }
                     return handleSubmitTask();
                   } else {
