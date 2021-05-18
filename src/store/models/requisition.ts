@@ -47,7 +47,7 @@ const effects = (dispatch:RematchDispatch<Models>):ModelEffects<RootState> => ({
     //const openId = rootState.common.openId || (await dispatch.common.fetchOpenId());
     try {
       const response = await confirm<any>(restPayload.no);
-      if(response.code === 1 && response.msg === 'Cannot complete a suspended task') {
+      if(response.code === 0) {
         Taro.showToast({
           title: '确认成功',
           icon: 'success',
