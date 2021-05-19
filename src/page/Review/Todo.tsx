@@ -15,11 +15,10 @@ import TaskDetail from '../../component/TaskDetail';
 import { maintenanceValueForState } from './constants';
 import { color } from '../../constants';
 
-function copyComment(role:string, type): null | ((when:string)=>string | null) {
+function copyComment(role:string, type, taskIdentify): null | ((when:string)=>string | null) {
   if(type !== 'Maintenance') return null;
-  const submitComments = [
+  const submitComments:{role: string;comment:string;when:string;identify?:string}[] = [
     {
-      
       role: '基层单位审批',
       comment: 'grassrootsLeadershipOpinion',
       when: '驳回'
@@ -43,9 +42,38 @@ function copyComment(role:string, type): null | ((when:string)=>string | null) {
       role: '副总审批',
       comment: 'vicePresidentLeadershipOpinion',
       when: '驳回'
+    },
+    {
+      identify: 'TemporaryMaintenance',
+      role: '设备部副经理审批',
+      comment: 'technologyLeadershipOpinion',
+      when: '驳回'
+    },
+    {
+      identify: 'OfficeMaintenance',
+      role: '发起人部门经理审批',
+      comment: 'deptLeadershipOpinion',
+      when: '驳回'
+    },
+    {
+      identify: 'OfficeMaintenance',
+      role: '办公室审批',
+      comment: 'officalLeadershipOpinion',
+      when: '驳回'
+    },
+    {
+      identify: 'OfficeMaintenance',
+      role: '设备部经理审批',
+      comment: 'deputyTechnologyLeadershipOpinion',
+      when: '驳回'
     }
   ];
-  const currentSubmitComment = submitComments.find(item => Boolean(~role.indexOf(item.role))) || null;
+  const currentSubmitComment = submitComments.find(item => {
+    const { identify='' } = item;
+    const isRole = Boolean(~role.indexOf(item.role));
+    return (isRole && (taskIdentify === identify)) || isRole;
+    
+  }) || null;
   return (when: string) => {
     if(currentSubmitComment && currentSubmitComment?.when === when) return currentSubmitComment.comment;
     return null;
@@ -157,7 +185,7 @@ const Todo:React.FC<{tid: string}> = props => {
         mask: true
       })
     } 
-    const copyedComment = copyComment(task?.taskName, type);
+    const copyedComment = copyComment(task?.taskName, type, task?.identify);
     //grassrootsLeadershipOpinion role.indexOf('基层单位审批') < 0
     const finalComment = (
       !copyedComment ? 
@@ -358,21 +386,35 @@ const Todo:React.FC<{tid: string}> = props => {
                   taskAction.current = item;
                   setOpened(false);
                   if(type === 'Maintenance') {
-                    if(task.taskName?.indexOf('机务员审批') > -1 && item === '驳回') {
-                      return handleShowFloatLayout(true);
-                    }
-                    if(task.taskName?.indexOf('船舶工单上传') > -1) {
-                      return Taro.showToast({
-                        title: '船舶工单请在电脑端操作',
-                        icon: 'none',
-                        mask: true,
-                        duration: 2000,
-                        success() {
-                          setTimeout(() => {
-                            handleSubmitTask();
-                          }, 2000)
+                    if(item === '驳回') {
+                      if(task?.identify === 'TemporaryMaintenance') {
+                        if(
+                          task.taskName?.indexOf('船长审批') > -1 || 
+                          task.taskName?.indexOf('设备部副经理二审') > -1
+                        ) {
+                          return handleShowFloatLayout(true);
                         }
-                      });
+                      }
+                      if(task?.identify === 'FactoryMaintenance') {
+                        if(task.taskName?.indexOf('机务员审批') > -1) {
+                          return handleShowFloatLayout(true);
+                        }
+                      }
+                      if(task?.identify === 'StopMaintenance') {
+                        if(task.taskName?.indexOf('船长审批') > -1) {
+                          return handleShowFloatLayout(true);
+                        }
+                        if(task.taskName?.indexOf('机务员二审') > -1) {
+                          return handleShowFloatLayout(true);
+                        }
+                      }
+                    }
+
+                    if(task.taskName?.indexOf('船舶工单上传') > -1) {
+                      const confirm = window.confirm('移动端无法填写维修消耗,如需选择消耗物资请去电脑端操作,是否继续');
+                      if(confirm) {
+                        handleSubmitTask();
+                      }
                     }
                     return handleSubmitTask();
                   } else {
