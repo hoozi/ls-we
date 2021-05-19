@@ -282,7 +282,7 @@ export const maintenanceFormItem = ({
         title: '预计开始时间',
         name: 'planStartTime',
         component: Picker,
-        isText: role.indexOf('船长审批') < 0,
+        isText: true,
         children: {
           component: AtListItem,
           props: {
@@ -297,7 +297,7 @@ export const maintenanceFormItem = ({
       {
         title: '预计结束天数',
         name: 'planEndDay',
-        isText: role.indexOf('船长审批') < 0,
+        isText: true,
         component: AtInput,
         props: {
           type: 'digit',
@@ -308,7 +308,7 @@ export const maintenanceFormItem = ({
         title: '实际开始时间',
         name: 'actualStartTime',
         component: Picker,
-        isText: role.indexOf('机务员审批') < 0,
+        isText: role.indexOf('机务员审批') < 0 && role.indexOf('机务员二审') < 0,
         children: {
           component: AtListItem,
           props: {
@@ -324,7 +324,7 @@ export const maintenanceFormItem = ({
         title: '实际结束时间',
         name: 'actualEndTime',
         component: Picker,
-        isText: role.indexOf('机务员审批') < 0,
+        isText: role.indexOf('机务员审批') < 0 && role.indexOf('机务员二审') < 0,
         children: {
           component: AtListItem,
           props: {
@@ -339,7 +339,7 @@ export const maintenanceFormItem = ({
       {
         title: '维修金额',
         name: 'repairFee',
-        isText: role.indexOf('机务员审批') < 0,
+        isText: role.indexOf('机务员审批') < 0 && role.indexOf('机务员二审') < 0,
         component: AtInput,
         props: {
           type: 'number',
@@ -350,7 +350,7 @@ export const maintenanceFormItem = ({
         title: '保养地点',
         name: 'maintenancePlace',
         component: Picker,
-        isText: role.indexOf('机务员审批') < 0,
+        isText: role.indexOf('机务员审批') < 0 && role.indexOf('机务员二审') < 0,
         children: {
           component: AtListItem,
           props: {
@@ -538,7 +538,44 @@ export const maintenanceFormItem = ({
           }) : null
         )
       },
-      ...basicItems
+      {
+        title: '维修金额',
+        name: 'repairFee',
+        required: role.indexOf('陆域维修管理员审批') > -1,
+        isText: role.indexOf('陆域维修管理员审批') < 0,
+        component: AtInput,
+        props: {
+          type: 'number',
+          placeholder: '请输入'
+        }
+      },
+      {
+        title: '部门意见',
+        name: 'deptLeadershipOpinion',
+        isText: role.indexOf('基层单位审批') < 0 && role.indexOf('发起人部门经理审批') < 0,
+        component: AtInput,
+        props: {
+          placeholder: '请输入'
+        }
+      },
+      {
+        title: '办公室意见',
+        name: 'officalLeadershipOpinion',
+        isText: role.indexOf('办公室审批') < 0,
+        component: AtInput,
+        props: {
+          placeholder: '请输入'
+        }
+      },
+      {
+        title: '技术设备部意见',
+        name: 'deputyTechnologyLeadershipOpinion',
+        isText: role.indexOf('设备部副经理审批') < 0 && role.indexOf('设备部经理审批') < 0,
+        component: AtInput,
+        props: {
+          placeholder: '请输入'
+        }
+      }
     ],
     YearMaintenance: [
       {
