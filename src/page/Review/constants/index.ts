@@ -575,6 +575,15 @@ export const maintenanceFormItem = ({
         props: {
           placeholder: '请输入'
         }
+      },
+      {
+        title: '技术副总意见',
+        name: 'vicePresidentLeadershipOpinion',
+        isText: role.indexOf('副总审批') < 0,
+        component: AtInput,
+        props: {
+          placeholder: '请输入'
+        }
       }
     ],
     YearMaintenance: [
