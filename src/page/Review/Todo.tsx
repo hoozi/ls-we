@@ -25,6 +25,12 @@ function copyComment(role:string, type, taskIdentify): null | ((when:string)=>st
       when: '驳回'
     },
     {
+      identify: 'TemporaryMaintenance',
+      role: '机务员审批',
+      comment: 'technologyLeadershipOpinion',
+      when: '驳回'
+    },
+    {
       identify: 'OfficeMaintenance',
       role: '发起人部门经理审批',
       comment: 'deptLeadershipOpinion',
