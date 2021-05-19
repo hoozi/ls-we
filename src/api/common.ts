@@ -44,3 +44,11 @@ export async function queryFileList(ids: string[]) {
   })
 }
 
+export async function queryVessel() {
+  return request<any[]>({
+    url: `/biz/base-vessel/list`,
+    method: 'GET',
+    onlyData: true
+  })
+}
+

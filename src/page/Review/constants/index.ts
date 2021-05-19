@@ -641,7 +641,6 @@ export const maintenanceFormItem = ({
         isText: true,
         component: AtInput,
         props: {
-          type: 'number',
           placeholder: '请输入'
         }
       }

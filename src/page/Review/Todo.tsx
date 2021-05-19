@@ -19,31 +19,6 @@ function copyComment(role:string, type, taskIdentify): null | ((when:string)=>st
   if(type !== 'Maintenance') return null;
   const submitComments:{role: string;comment:string;when:string;identify?:string}[] = [
     {
-      role: '基层单位审批',
-      comment: 'grassrootsLeadershipOpinion',
-      when: '驳回'
-    },
-    {
-      role: '设备部副经理审批',
-      comment: 'deputyTechnologyLeadershipOpinion',
-      when: '驳回'
-    },
-    {
-      role: '设备部经理审批',
-      comment: 'technologyLeadershipOpinion',
-      when: '驳回'
-    },
-    {
-      role: '机务员审批',
-      comment: 'technologyLeadershipOpinion',
-      when: '驳回'
-    },
-    {
-      role: '副总审批',
-      comment: 'vicePresidentLeadershipOpinion',
-      when: '驳回'
-    },
-    {
       identify: 'TemporaryMaintenance',
       role: '设备部副经理审批',
       comment: 'technologyLeadershipOpinion',
@@ -66,13 +41,42 @@ function copyComment(role:string, type, taskIdentify): null | ((when:string)=>st
       role: '设备部经理审批',
       comment: 'deputyTechnologyLeadershipOpinion',
       when: '驳回'
+    },
+    {
+      identify: 'FactoryMaintenance',
+      role: '基层单位审批',
+      comment: 'grassrootsLeadershipOpinion',
+      when: '驳回'
+    },
+    {
+      identify: 'FactoryMaintenance',
+      role: '设备部副经理审批',
+      comment: 'deputyTechnologyLeadershipOpinion',
+      when: '驳回'
+    },
+    {
+      identify: 'FactoryMaintenance',
+      role: '设备部经理审批',
+      comment: 'technologyLeadershipOpinion',
+      when: '驳回'
+    },
+    {
+      identify: 'FactoryMaintenance',
+      role: '机务员审批',
+      comment: 'technologyLeadershipOpinion',
+      when: '驳回'
+    },
+    {
+      identify: 'FactoryMaintenance',
+      role: '副总审批',
+      comment: 'vicePresidentLeadershipOpinion',
+      when: '驳回'
     }
   ];
   const currentSubmitComment = submitComments.find(item => {
     const { identify='' } = item;
     const isRole = Boolean(~role.indexOf(item.role));
-    return (isRole && (taskIdentify === identify)) || isRole;
-    
+    return (isRole && (taskIdentify === identify));
   }) || null;
   return (when: string) => {
     if(currentSubmitComment && currentSubmitComment?.when === when) return currentSubmitComment.comment;
@@ -92,6 +96,7 @@ const Todo:React.FC<{tid: string}> = props => {
   const taskAction = React.useRef<string>('');
   const currentId = React.useRef<number>(-1);
   const currentRecords = React.useRef<any[]>([]);
+  const dynamicComment = React.useRef<boolean>(false);
   const { review } = useDispatch<RematchDispatch<Models>>();
   const { task, records } = useSelector((state: RootState) => state.review);
   const currentRow = React.useRef<any>([]);
@@ -188,10 +193,11 @@ const Todo:React.FC<{tid: string}> = props => {
     const copyedComment = copyComment(task?.taskName, type, task?.identify);
     //grassrootsLeadershipOpinion role.indexOf('基层单位审批') < 0
     const finalComment = (
-      !copyedComment ? 
+      (!copyedComment || !dynamicComment.current) ? 
         comment : 
         maintenanceValue[task?.identify][copyedComment(taskAction.current) || ''] 
     )
+    
     review.submitTask({
       ...task,
       extra: currentRow.current.length ? currentRow.current : (type === 'Maintenance' ? {...maintenanceValue[task?.identify], validate: false} : records.map(item => ({...item}))),
@@ -392,19 +398,23 @@ const Todo:React.FC<{tid: string}> = props => {
                           task.taskName?.indexOf('船长审批') > -1 || 
                           task.taskName?.indexOf('设备部副经理二审') > -1
                         ) {
+                          dynamicComment.current = false;
                           return handleShowFloatLayout(true);
                         }
                       }
                       if(task?.identify === 'FactoryMaintenance') {
                         if(task.taskName?.indexOf('机务员审批') > -1) {
+                          dynamicComment.current = false;
                           return handleShowFloatLayout(true);
                         }
                       }
                       if(task?.identify === 'StopMaintenance') {
                         if(task.taskName?.indexOf('船长审批') > -1) {
+                          dynamicComment.current = false;
                           return handleShowFloatLayout(true);
                         }
                         if(task.taskName?.indexOf('机务员二审') > -1) {
+                          dynamicComment.current = false;
                           return handleShowFloatLayout(true);
                         }
                       }
@@ -413,9 +423,11 @@ const Todo:React.FC<{tid: string}> = props => {
                     if(task.taskName?.indexOf('船舶工单上传') > -1) {
                       const confirm = window.confirm('移动端无法填写维修消耗,如需选择消耗物资请去电脑端操作,是否继续');
                       if(confirm) {
-                        handleSubmitTask();
+                        dynamicComment.current = true;
+                        return handleSubmitTask();
                       }
                     }
+                    dynamicComment.current = true;
                     return handleSubmitTask();
                   } else {
                     return handleShowFloatLayout(true);
