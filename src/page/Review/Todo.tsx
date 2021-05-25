@@ -330,6 +330,11 @@ const Todo:React.FC<{tid: string}> = props => {
                         break;
                     }
                   }
+                  if(task.taskName?.indexOf('物资审批 - 物资部总管审批') > -1) {
+                    if(!Number(item.flightAuditCount)) {
+                      item.outWarehouseStatus = '未批准'
+                    }
+                  }
                   return (
                     <TodoCard
                       key={item.id || index}
@@ -343,7 +348,7 @@ const Todo:React.FC<{tid: string}> = props => {
                         ( item.flightAuditCount|| item.captainAuditCount || item.quantity || 0 ) <= item.inWarehouseQuantity
                       }
                       rows={todoRows}
-                      headerExtra={task.taskName?.indexOf('物资审批 - 物资部总管审批') > -1 ? <b style={{color:color.brandColor}}>{item.outWarehouseStatus}</b> : null}
+                      headerExtra={task.taskName?.indexOf('物资审批 - 物资部总管审批') > -1 ? <div><b style={{color:color.brandColor}}>{item.outWarehouseStatus}</b></div>: null}
                       onCardClick={() => {
                         if( detail === '1') return
                         return getAction(item, index)
