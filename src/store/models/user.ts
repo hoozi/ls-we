@@ -57,6 +57,8 @@ const effects:ModelEffects<RootState> = {
       });
       const response = await signIn<UserToken>({
         ...payload,
+        client_id: 'weihuang',
+        client_secret: 'weihuang',
         randomStr,
         password: encryptioned.password
       });

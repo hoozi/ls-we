@@ -78,6 +78,14 @@ function parseData(response: ResponseData, options?:ApiOptions): any{
   return response;
 }
 
+function tranformMethod(options: Options) {
+  const originalMethod = options.method;
+  if(options.method === 'DELETE' || options.method === 'PUT') {
+    options.method = 'POST';
+    options.headers['X-HTTP-Method-Override'] = originalMethod;
+  }
+}
+
 /**
  * Requests a URL, returning a promise.
  *
@@ -107,10 +115,11 @@ export default function request<T>(options: Options): Promise<T> {
   }
   newOptions.header = {
     ...newOptions.header,
-    Authorization: getToken() ? `Bearer ${getToken()}` : 'Basic d2VpaHVhbmc6d2VpaHVhbmc=',
+    'X-Authorization': getToken() ? `Bearer ${getToken()}` : 'Basic d2VpaHVhbmc6d2VpaHVhbmc=',
     SIGN: encrypt(Date.now())
   }
   newOptions.url = `${service_url}${newOptions.url}`;
+  tranformMethod(newOptions);
   return Taro.request(newOptions)
     .then(response => {
       Taro.hideLoading();

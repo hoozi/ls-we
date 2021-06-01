@@ -9,7 +9,7 @@ const Sign:React.FC<any> & {[key: string]:any} = props => {
     <View className={classNames.signContainer}>
       <View className={classNames.signCard}>
         <View className={classNames.circleBg}/>
-        <Text className={classNames.signTitle}>你好，欢迎回来</Text>
+        <Text className={classNames.signTitle}>船舶管理系统</Text>
       </View>
       <View className={classNames.signInContainer}>
         <SignIn/>
