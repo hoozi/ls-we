@@ -107,7 +107,7 @@ const Todo:React.FC<{tid: string}> = props => {
   const { task, records } = useSelector((state: RootState) => state.review);
   const currentRow = React.useRef<any>([]);
   //<input type="file" accept="image/*" />
-  const allRows = Array.isArray(records) ? records.filter(item => item.outWarehouseStatus === '未出库' && ( item.flightAuditCount|| item.captainAuditCount || item.quantity || 0 ) <= item.inWarehouseQuantity) : [];
+  const allRows = Array.isArray(records) ? records.filter(item => (item.outWarehouseStatus === '未出库'  || item.outWarehouseStatus === '未批准') && ( item.flightAuditCount|| item.captainAuditCount || item.quantity || 0 ) <= item.inWarehouseQuantity) : [];
   const todoRows = [
     {
       title: '物资名称',
@@ -343,7 +343,7 @@ const Todo:React.FC<{tid: string}> = props => {
                       checked={rows.indexOf(item) > -1}
                       checkable={
                         task.taskName?.indexOf('物资审批 - 物资部总管审批') > -1 && 
-                        item.outWarehouseStatus === '未出库' && 
+                        (item.outWarehouseStatus === '未出库' || item.outWarehouseStatus === '未批准') && 
                         detail === '0' &&
                         ( item.flightAuditCount|| item.captainAuditCount || item.quantity || 0 ) <= item.inWarehouseQuantity
                       }
